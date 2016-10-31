@@ -1,143 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#eff2f6"
     android:orientation="vertical" >
 
     <RelativeLayout
+        android:id="@+id/RegisterTitle"
         android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1" >
-
+        android:layout_height="57dp"
+        android:background="#000000">
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:src="@drawable/em_welcom_logo" />
+            android:id="@+id/RegisterBack"
+            android:layout_centerVertical="true"
+            android:layout_width="20dp"
+            android:layout_height="50dp"
+            android:src="@drawable/rp_title_back"/>
     </RelativeLayout>
 
-    <LinearLayout
+    <EditText
+        android:layout_below="@id/RegisterTitle"
+        android:id="@+id/UserNameRegister"
+        android:layout_marginLeft="10dp"
         android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_weight="1.5"
-        android:orientation="vertical" >
+        android:layout_height="70dp"
+        android:hint="UserName"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="#fff" >
+    <EditText
+        android:id="@+id/UserNickRegister"
+        android:layout_below="@id/UserNameRegister"
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:hint="UserNick"
+        android:inputType="textPassword"/>
+    <EditText
+        android:id="@+id/UserPasswordRegister"
+        android:layout_below="@id/UserNickRegister"
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:hint="Password"
+        android:inputType="textPassword"/>
+    <EditText
+        android:id="@+id/UserConfirmPasswordRegister"
+        android:layout_below="@id/UserPasswordRegister"
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:hint="ConfirmPassword"
+        android:inputType="textPassword"/>
+    <Button
+        android:id="@+id/RegisterButton"
+        android:layout_below="@id/UserConfirmPasswordRegister"
+        android:layout_marginTop="47dp"
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:text="Register"
+        android:background="#33cc33"
+        android:textSize="25dp"/>
 
-            <ImageView
-                android:id="@+id/iv_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dip"
-                android:src="@drawable/em_icon_account" />
-
-            <EditText
-                android:id="@+id/username"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@id/iv_username"
-                android:background="@null"
-                android:hint="@string/user_name"
-                android:paddingLeft="10dip"
-                android:singleLine="true"
-                android:textSize="18sp" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:background="#fff" >
-
-            <ImageView
-                android:id="@+id/iv_password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dip"
-                android:src="@drawable/em_icon_pwd" />
-
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@id/iv_password"
-                android:background="@null"
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:paddingLeft="10dip"
-                android:singleLine="true"
-                android:textSize="18sp" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:background="#fff" >
-
-            <ImageView
-                android:id="@+id/iv_password2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dip"
-                android:src="@drawable/em_icon_pwd" />
-
-            <EditText
-                android:id="@+id/confirm_password"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@id/iv_password2"
-                android:background="@null"
-                android:hint="@string/confirmpassword"
-                android:inputType="textPassword"
-                android:paddingLeft="10dip"
-                android:singleLine="true"
-                android:textSize="18sp" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal" >
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/em_button_login_bg"
-                android:onClick="register"
-                android:paddingBottom="7dp"
-                android:paddingTop="7dp"
-                android:text="@string/register"
-                android:textColor="@android:color/white"
-                android:textSize="20sp" />
-        </LinearLayout>
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>
