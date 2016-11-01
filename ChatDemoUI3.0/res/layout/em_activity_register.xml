@@ -43,7 +43,7 @@
         android:hint="Password"
         android:inputType="textPassword"/>
     <EditText
-        android:id="@+id/UserConfirmPasswordRegister"
+        android:id="@+id/confirm_password"
         android:layout_below="@id/UserPasswordRegister"
         android:layout_marginLeft="10dp"
         android:layout_width="match_parent"
@@ -52,7 +52,7 @@
         android:inputType="textPassword"/>
     <Button
         android:id="@+id/RegisterButton"
-        android:layout_below="@id/UserConfirmPasswordRegister"
+        android:layout_below="@id/confirm_password"
         android:layout_marginTop="47dp"
         android:layout_width="match_parent"
         android:layout_height="57dp"

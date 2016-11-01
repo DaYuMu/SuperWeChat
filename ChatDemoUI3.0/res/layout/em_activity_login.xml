@@ -20,15 +20,15 @@
 
     <EditText
         android:layout_below="@id/LoginTitle"
-        android:id="@+id/UserNameLogin"
+        android:id="@+id/username"
         android:layout_marginLeft="10dp"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:hint="UserName"/>
 
     <EditText
-        android:id="@+id/UserPasswordLogin"
-        android:layout_below="@id/UserNameLogin"
+        android:id="@+id/password"
+        android:layout_below="@id/username"
         android:layout_marginLeft="10dp"
         android:layout_width="match_parent"
         android:layout_height="70dp"
@@ -36,7 +36,7 @@
         android:inputType="textPassword"/>
     <Button
         android:id="@+id/LoginButton"
-        android:layout_below="@id/UserPasswordLogin"
+        android:layout_below="@id/password"
         android:layout_marginTop="47dp"
         android:layout_width="match_parent"
         android:layout_height="57dp"
@@ -58,7 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Register"
-        android:background="#EEE9E9"
+        android:background="#EEE9A9"
         android:textSize="21dp"/>
 
 

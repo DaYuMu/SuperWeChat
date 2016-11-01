@@ -6,6 +6,7 @@
     android:background="#FFFFFF">
 
     <ImageView
+        android:id="@+id/IVGuide"
         android:layout_width="127dp"
         android:layout_height="127dp"
         android:src="@mipmap/ic_launcher"
@@ -13,8 +14,9 @@
         android:layout_centerHorizontal="true"/>
 
     <Button
+        android:layout_below="@id/IVGuide"
+        android:layout_marginTop="30dp"
         android:id="@+id/ButtonLogin"
-        android:layout_marginTop="300dp"
         android:layout_centerInParent="true"
         android:layout_width="300dp"
         android:layout_height="57dp"
