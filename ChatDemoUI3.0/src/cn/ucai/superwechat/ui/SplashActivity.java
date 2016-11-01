@@ -37,6 +37,7 @@ public class SplashActivity extends BaseActivity {
 
 		new Thread(new Runnable() {
 			public void run() {
+				//  判断是否登录，决定闪屏页面好之后进入哪个页面
 				if (DemoHelper.getInstance().isLoggedIn()) {
 					// auto login mode, make sure all group and conversation is loaed before enter the main screen
 					long start = System.currentTimeMillis();
@@ -52,7 +53,8 @@ public class SplashActivity extends BaseActivity {
 						}
 					}
 					//enter main screen
-					startActivity(new Intent(SplashActivity.this, MainActivity.class));
+					//                                            从闪屏页面跳转都欢迎页面
+					startActivity(new Intent(SplashActivity.this, GuideActivity.class));
 					finish();
 				}else {
 					try {
