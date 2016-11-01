@@ -16,6 +16,13 @@
             android:layout_width="20dp"
             android:layout_height="50dp"
             android:src="@drawable/rp_title_back"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="登录"
+            android:textColor="#FFFFFF"
+            android:textSize="30dp"
+            android:layout_centerInParent="true"/>
     </RelativeLayout>
 
     <EditText
@@ -24,6 +31,8 @@
         android:layout_marginLeft="10dp"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:background="@drawable/edittext_login"
+        android:textSize="20dp"
         android:hint="UserName"/>
 
     <EditText
@@ -32,6 +41,8 @@
         android:layout_marginLeft="10dp"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:background="@drawable/edittext_login"
+        android:textSize="20dp"
         android:hint="Password"
         android:inputType="textPassword"/>
     <Button
@@ -42,7 +53,8 @@
         android:layout_height="57dp"
         android:text="Login"
         android:background="#33cc33"
-        android:textSize="25dp"/>
+        android:textSize="25dp"
+        android:gravity="center"/>
     <TextView
         android:id="@+id/ProblemLogin"
         android:layout_below="@id/LoginButton"
@@ -50,14 +62,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="17dp"
-        android:text="The Problem For Login？"/>
+        android:text="The Problem for Login？"/>
 
     <Button
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="177dp"
+        android:layout_height="57dp"
         android:text="Register"
+        android:gravity="center"
         android:background="#EEE9A9"
         android:textSize="21dp"/>
 

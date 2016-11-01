@@ -18,9 +18,11 @@
         android:layout_marginTop="30dp"
         android:id="@+id/ButtonLogin"
         android:layout_centerInParent="true"
+        android:gravity="center"
         android:layout_width="300dp"
         android:layout_height="57dp"
         android:background="#4AA747"
+        android:textSize="27dp"
         android:text="Login"/>
 
     <Button
@@ -28,8 +30,10 @@
         android:layout_marginTop="3dp"
         android:layout_below="@id/ButtonLogin"
         android:layout_centerInParent="true"
+        android:gravity="center"
         android:layout_width="300dp"
         android:background="#CFCFCF"
         android:layout_height="57dp"
+        android:textSize="27dp"
         android:text="Register"/>
 </RelativeLayout>
