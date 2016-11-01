@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@color/colorPrimary">
 
     <ImageView
         android:id="@+id/IVGuide"
         android:layout_width="127dp"
         android:layout_height="127dp"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/icon_logo"
         android:layout_marginTop="100dp"
         android:layout_centerHorizontal="true"/>
 
@@ -20,7 +20,7 @@
         android:layout_centerInParent="true"
         android:layout_width="300dp"
         android:layout_height="57dp"
-        android:background="#33cc33"
+        android:background="#4AA747"
         android:text="Login"/>
 
     <Button
@@ -29,7 +29,7 @@
         android:layout_below="@id/ButtonLogin"
         android:layout_centerInParent="true"
         android:layout_width="300dp"
-        android:background="#33cc33"
+        android:background="#CFCFCF"
         android:layout_height="57dp"
         android:text="Register"/>
 </RelativeLayout>
