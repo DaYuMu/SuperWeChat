@@ -16,11 +16,17 @@ package cn.ucai.superwechat.ui;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 
+//import butterknife.BindView;    可以通过手动导入ButterKnife的包来实现ButterKnife的使用
+//import butterknife.ButterKnife;
+//import butterknife.OnClick;
+import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.data.NetDao;
 import cn.ucai.superwechat.data.OkHttpUtils;
+import cn.ucai.superwechat.utils.CommonUtils;
+import cn.ucai.superwechat.utils.MD5;
 import cn.ucai.superwechat.utils.MFGT;
 
 import com.hyphenate.exceptions.HyphenateException;
@@ -29,40 +35,65 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 /**
  * register screen
- * 
+ *
  */
 public class RegisterActivity extends BaseActivity {
 	private EditText userNameEditText;
+	private EditText userNickEditText;
 	private EditText passwordEditText;
 	private EditText confirmPwdEditText;
-	final ProgressDialog pd = null;
+	Button mRegisterButton;
+	ImageView mRegisterBack;
+	ProgressDialog pd = null;
 
 	RegisterActivity mContext;
 
 	String username;
 	String usernick;
 	String pwd;
-	String confirm_pwd;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		setContentView(cn.ucai.superwechat.R.layout.em_activity_register);
 		super.onCreate(savedInstanceState);
 		mContext = this;
 		initView();
-		setContentView(cn.ucai.superwechat.R.layout.em_activity_register);
-		userNameEditText = (EditText) findViewById(cn.ucai.superwechat.R.id.username);
-		userNickEditText = (EditText) findViewById(cn.ucai.superwechat.R.id.usernick);
-		passwordEditText = (EditText) findViewById(cn.ucai.superwechat.R.id.password);
-		confirmPwdEditText = (EditText) findViewById(cn.ucai.superwechat.R.id.confirm_password);
+		setLitener();
+	}
+
+	private void setLitener() {
+		mRegisterButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				register();
+			}
+		});
+		mRegisterBack.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				MFGT.finish(mContext);
+			}
+		});
+	}
+
+	private void initView() {
+		userNameEditText = (EditText) findViewById(R.id.UserNameRegister);
+		userNickEditText = (EditText) findViewById(R.id.UserNickRegister);
+		passwordEditText = (EditText) findViewById(R.id.UserPasswordRegister);
+		confirmPwdEditText = (EditText) findViewById(R.id.confirm_password);
+		mRegisterButton = (Button) findViewById(R.id.RegisterButton);
+		mRegisterBack = (ImageView) findViewById(R.id.RegisterBack);
 	}
 
 
-	public void register(View view) {
+	public void register() {
 		username = userNameEditText.getText().toString().trim();
 		usernick = userNickEditText.getText().toString().trim();
 		pwd = passwordEditText.getText().toString().trim();
@@ -108,10 +139,18 @@ public class RegisterActivity extends BaseActivity {
 		NetDao.register(mContext, username, usernick, pwd, new OkHttpUtils.OnCompleteListener<Result>() {
 			@Override
 			public void onSuccess(Result result) {
-				if (result != null && result.isRetMsg()) {
-					registerEMService();
-				} else {
+				if (result == null) {
 					unregisterAppService();
+				} else {
+					if (result.isRetMsg()) {
+						registerEMService();
+					} else if (result.getRetCode()== I.MSG_REGISTER_USERNAME_EXISTS) {
+							CommonUtils.showMsgShortToast(result.getRetCode());
+							pd.dismiss();
+						} else {
+							unregisterAppService();
+						}
+
 				}
 			}
 
@@ -140,8 +179,8 @@ public class RegisterActivity extends BaseActivity {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					// call method in SDK
-					EMClient.getInstance().createAccount(username, pwd);
+					// call method in SDK                                   对环信注册时的密码进行加密处理
+					EMClient.getInstance().createAccount(username, MD5.getMessageDigest(pwd));
 					runOnUiThread(new Runnable() {
 						public void run() {
 							if (!RegisterActivity.this.isFinishing())
@@ -158,7 +197,7 @@ public class RegisterActivity extends BaseActivity {
 						public void run() {
 							if (!RegisterActivity.this.isFinishing())
 								pd.dismiss();
-							int errorCode=e.getErrorCode();
+								int errorCode=e.getErrorCode();
 							if(errorCode==EMError.NETWORK_ERROR){
 								Toast.makeText(getApplicationContext(), getResources().getString(cn.ucai.superwechat.R.string.network_anomalies), Toast.LENGTH_SHORT).show();
 							}else if(errorCode == EMError.USER_ALREADY_EXIST){
@@ -178,10 +217,9 @@ public class RegisterActivity extends BaseActivity {
 
 	}
 
-	public void back(View view) {
-		finish();
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		MFGT.finish(mContext);
 	}
-
-
-
 }
