@@ -10,6 +10,8 @@ import com.hyphenate.chat.EMClient;
 
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatHelper;
+import cn.ucai.superwechat.db.UserDao;
+import cn.ucai.superwechat.domain.User;
 import cn.ucai.superwechat.utils.L;
 
 /**
@@ -18,22 +20,15 @@ import cn.ucai.superwechat.utils.L;
  */
 public class SplashActivity extends BaseActivity {
 	private static final String TAG = SplashActivity.class.getSimpleName();
-
+	SplashActivity mContext;
 	private static final int sleepTime = 2000;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
+		mContext = this;
 		setContentView(cn.ucai.superwechat.R.layout.em_activity_splash);
 
-		/*RelativeLayout rootLayout = (RelativeLayout) findViewById(R.id.splash_root);
-		TextView versionText = (TextView) findViewById(R.id.tv_version);
-		L.e(TAG+"OnCreate()",getVersion());
-		versionText.setText(getVersion());
-		AlphaAnimation animation = new AlphaAnimation(0.3f, 1.0f);
-		animation.setDuration(1500);
-		rootLayout.startAnimation(animation);
-		L.e(TAG,"onCreate（）方法执行完毕");*/
 	}
 
 	@Override
@@ -50,6 +45,12 @@ public class SplashActivity extends BaseActivity {
 					long start = System.currentTimeMillis();
 					EMClient.getInstance().groupManager().loadAllGroups();
 					EMClient.getInstance().chatManager().loadAllConversations();
+
+					UserDao dao = new UserDao(mContext);
+					User user = dao.getUser(EMClient.getInstance().getCurrentUser());
+					L.e(TAG,"user="+user);
+					SuperWeChatHelper.getInstance().setCurrentUserName(user.getMUserName());
+
 					long costTime = System.currentTimeMillis() - start;
 					//wait
 					if (sleepTime - costTime > 0) {
