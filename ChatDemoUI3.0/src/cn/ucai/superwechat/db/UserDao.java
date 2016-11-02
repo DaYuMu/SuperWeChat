@@ -19,6 +19,7 @@ import java.util.Map;
 import android.content.Context;
 import android.util.Log;
 
+import cn.hyphenate.easeui.domain.EaseUser;
 import cn.ucai.superwechat.domain.RobotUser;
 import cn.ucai.superwechat.domain.User;
 
@@ -111,13 +112,13 @@ public class UserDao {
 
 	public boolean saveUser(User user) {
 		Log.e(TAG,"user="+user);
-		return DBManager.getInstance().saveUser(user);
+		return SuperWeChatDBManager.getInstance().saveUser(user);
 	}
 
 	public User getUser(String name) {
-		return DBManager.getInstance().getUser(name);
+		return SuperWeChatDBManager.getInstance().getUser(name);
 	}
 	public boolean update(User user) {
-		return DBManager.getInstance().update(user);
+		return SuperWeChatDBManager.getInstance().update(user);
 	}
 }
