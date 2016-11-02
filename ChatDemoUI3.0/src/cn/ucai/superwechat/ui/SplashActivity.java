@@ -62,7 +62,7 @@ public class SplashActivity extends BaseActivity {
 					//enter main screen
 					//                                            从闪屏页面跳转都欢迎页面
 					L.e(TAG,"开始执行从闪屏页面跳转到欢迎页面");
-					startActivity(new Intent(SplashActivity.this, GuideActivity.class));
+					startActivity(new Intent(SplashActivity.this, LoginActivity.class));
 					finish();
 				}else {
 					try {
@@ -70,7 +70,7 @@ public class SplashActivity extends BaseActivity {
 					} catch (InterruptedException e) {
 					}
 					L.e(TAG,"开始执行从闪屏页面跳转到登录页面");
-					startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+					startActivity(new Intent(SplashActivity.this, GuideActivity.class));
 					finish();
 				}
 			}
