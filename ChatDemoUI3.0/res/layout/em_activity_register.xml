@@ -13,7 +13,7 @@
         <ImageView
             android:id="@+id/RegisterBack"
             android:layout_centerVertical="true"
-            android:layout_width="20dp"
+            android:layout_width="40dp"
             android:layout_height="50dp"
             android:src="@drawable/rp_title_back"/>
         <TextView
@@ -44,8 +44,7 @@
         android:layout_height="70dp"
         android:background="@drawable/edittext_login"
         android:textSize="20dp"
-        android:hint="UserNick"
-        android:inputType="textPassword"/>
+        android:hint="UserNick"/>
     <EditText
         android:id="@+id/UserPasswordRegister"
         android:layout_below="@id/UserNickRegister"

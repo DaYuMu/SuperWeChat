@@ -65,6 +65,7 @@
         android:text="The Problem for Login？"/>
 
     <Button
+        android:id="@+id/LoginButtonRegister"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_width="177dp"
@@ -72,6 +73,7 @@
         android:text="Register"
         android:gravity="center"
         android:background="#EEE9A9"
+        android:layout_marginBottom="20dp"
         android:textSize="21dp"/>
 
 
