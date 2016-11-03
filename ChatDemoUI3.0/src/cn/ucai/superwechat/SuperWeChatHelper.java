@@ -31,6 +31,7 @@ import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.EmojiconExampleGroupData;
 import cn.ucai.superwechat.domain.InviteMessage;
 import cn.ucai.superwechat.domain.RobotUser;
+import cn.ucai.superwechat.domain.User;
 import cn.ucai.superwechat.parse.UserProfileManager;
 import cn.ucai.superwechat.receiver.CallReceiver;
 import cn.ucai.superwechat.ui.ChatActivity;
@@ -79,6 +80,8 @@ public class SuperWeChatHelper {
     protected EMMessageListener messageListener = null;
 
 	private Map<String, EaseUser> contactList;
+
+    private Map<String, User> acontactList;
 
 	private Map<String, RobotUser> robotList;
 
@@ -840,8 +843,6 @@ public class SuperWeChatHelper {
 	
 	/**
 	 * update contact list
-	 * 
-	 * @param contactList
 	 */
 	public void setContactList(Map<String, EaseUser> aContactList) {
 		if(aContactList == null){
@@ -912,8 +913,6 @@ public class SuperWeChatHelper {
 
 	 /**
      * update user list to cache and database
-     *
-     * @param contactList
      */
     public void updateContactList(List<EaseUser> contactInfoList) {
          for (EaseUser u : contactInfoList) {
@@ -939,7 +938,7 @@ public class SuperWeChatHelper {
 		}
 	}
 	
-  public void addSyncGroupListener(DataSyncListener listener) {
+    public void addSyncGroupListener(DataSyncListener listener) {
         if (listener == null) {
             return;
         }
@@ -1236,4 +1235,59 @@ public class SuperWeChatHelper {
         easeUI.popActivity(activity);
     }
 
+
+
+
+
+    //
+    /*
+     * update user list to cache and database
+     */
+    public void updateAppContactList(List<User> acontactInfoList) {
+        for (User u : acontactInfoList) {
+            acontactList.put(u.getMUserName(),u);
+        }
+        ArrayList<User> mList = new ArrayList<User>();
+        mList.addAll(acontactList.values());
+        demoModel.saveAppContactList(mList);
+    }
+    /**
+     * update contact list
+     */
+    public void setAppContactList(Map<String, User> aContactList) {
+        if(aContactList == null){
+            if (contactList != null) {
+                contactList.clear();
+            }
+            return;
+        }
+
+        acontactList = aContactList;
+    }
+
+    /**
+     * save single contact
+     */
+    public void saveAppContact(User user){
+        acontactList.put(user.getMUserName(), user);
+        demoModel.saveAppContact(user);
+    }
+
+    /**
+     * get contact list
+     *
+     * @return
+     */
+    public Map<String, User> getAppContactList() {
+        if (isLoggedIn() && acontactList == null) {
+            acontactList = demoModel.getAppContactList();
+        }
+
+        // return a empty non-null object to avoid app crash
+        if(acontactList == null){
+            return new Hashtable<String, User>();
+        }
+
+        return acontactList;
+    }
 }
