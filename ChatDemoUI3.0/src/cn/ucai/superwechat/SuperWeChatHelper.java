@@ -1220,8 +1220,10 @@ public class SuperWeChatHelper {
         isBlackListSyncedWithServer = false;
 
         isGroupAndContactListenerRegisted = false;
-        
+
+
         setContactList(null);
+        setAppContactList(null);
         setRobotList(null);
         getUserProfileManager().reset();
         SuperWeChatDBManager.getInstance().closeDB();
