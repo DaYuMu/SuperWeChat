@@ -189,6 +189,51 @@ public class EaseCommonUtils {
         }
         user.setInitialLetter(letter);
     }
+
+    /**
+     * set initial letter of according user's nickname( username if no nickname)
+     *  需要改正、、、、、、、、、、、、、、、、、、、、因为报错，所以稍后。。
+     * @param username
+     * @param user
+     */
+    public static void setAppUserInitialLetter(User user) {
+        final String DefaultLetter = "#";
+        String letter = DefaultLetter;
+
+        final class GetInitialLetter {
+            String getLetter(String name) {
+                if (TextUtils.isEmpty(name)) {
+                    return DefaultLetter;
+                }
+                char char0 = name.toLowerCase().charAt(0);
+                if (Character.isDigit(char0)) {
+                    return DefaultLetter;
+                }
+                ArrayList<Token> l = HanziToPinyin.getInstance().get(name.substring(0, 1));
+                if (l != null && l.size() > 0 && l.get(0).target.length() > 0)
+                {
+                    Token token = l.get(0);
+                    String letter = token.target.substring(0, 1).toUpperCase();
+                    char c = letter.charAt(0);
+                    if (c < 'A' || c > 'Z') {
+                        return DefaultLetter;
+                    }
+                    return letter;
+                }
+                return DefaultLetter;
+            }
+        }
+
+        if ( !TextUtils.isEmpty(user.getNick()) ) {
+            letter = new GetInitialLetter().getLetter(user.getNick());
+            user.setInitialLetter(letter);
+            return;
+        }
+        if (letter.equals(DefaultLetter) && !TextUtils.isEmpty(user.getUsername())) {
+            letter = new GetInitialLetter().getLetter(user.getUsername());
+        }
+        user.setInitialLetter(letter);
+    }
     
     /**
      * change the chat type to EMConversationType

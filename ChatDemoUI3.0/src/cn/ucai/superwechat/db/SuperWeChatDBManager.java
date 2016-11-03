@@ -6,12 +6,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 
+import cn.hyphenate.easeui.utils.EaseCommonUtils;
 import cn.ucai.superwechat.Constant;
 import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.domain.InviteMessage;
 import cn.ucai.superwechat.domain.RobotUser;
 import cn.hyphenate.easeui.domain.EaseUser;
-import cn.hyphenate.easeui.utils.EaseCommonUtils;
 import cn.ucai.superwechat.domain.User;
 import cn.ucai.superwechat.utils.L;
 
@@ -480,10 +480,10 @@ public class SuperWeChatDBManager {
 
 
     public Map<String, User> getAppContactList() {
-        /*SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         Map<String, User> users = new Hashtable<String, User>();
         if (db.isOpen()) {
-            Cursor cursor = db.rawQuery("select * from " + UserDao.USER_TABLE_NAME *//* + " desc" *//*, null);
+            Cursor cursor = db.rawQuery("select * from " + UserDao.USER_TABLE_NAME  + " desc" , null);
             while (cursor.moveToNext()) {
                 String username = cursor.getString(cursor.getColumnIndex(UserDao.USER_COLUMN_NAME));
                 User user = new User(username);
@@ -493,12 +493,11 @@ public class SuperWeChatDBManager {
                 user.setMAvatarPath(cursor.getString(cursor.getColumnIndex(UserDao.USER_COLUMN_AVATAR_PATH)));
                 user.setMAvatarSuffix(cursor.getString(cursor.getColumnIndex(UserDao.USER_COLUMN_AVATAR_SUFFIX)));
                 user.setMAvatarLastUpdateTime(cursor.getString(cursor.getColumnIndex(UserDao.USER_COLUMN_AVATAR_LASTUPDATE_TIME)));
-
                 EaseCommonUtils.setUserInitialLetter(user);
                 users.put(username, user);
             }
             cursor.close();
-        }*/
+        }
         return null;
     }
 }
