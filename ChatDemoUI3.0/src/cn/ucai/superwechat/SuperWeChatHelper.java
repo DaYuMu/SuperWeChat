@@ -32,7 +32,7 @@ import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.EmojiconExampleGroupData;
 import cn.ucai.superwechat.domain.InviteMessage;
 import cn.ucai.superwechat.domain.RobotUser;
-import cn.ucai.superwechat.domain.User;
+import cn.hyphenate.easeui.domain.User;
 import cn.ucai.superwechat.parse.UserProfileManager;
 import cn.ucai.superwechat.receiver.CallReceiver;
 import cn.ucai.superwechat.ui.ChatActivity;

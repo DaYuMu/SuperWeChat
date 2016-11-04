@@ -4,7 +4,7 @@ import android.content.Context;
 
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.RobotUser;
-import cn.ucai.superwechat.domain.User;
+import cn.hyphenate.easeui.domain.User;
 import cn.ucai.superwechat.utils.PreferenceManager;
 import cn.hyphenate.easeui.domain.EaseUser;
 import cn.hyphenate.easeui.model.EaseAtMessageHelper;

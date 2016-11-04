@@ -22,7 +22,7 @@ import android.util.Log;
 
 import cn.hyphenate.easeui.domain.EaseUser;
 import cn.ucai.superwechat.domain.RobotUser;
-import cn.ucai.superwechat.domain.User;
+import cn.hyphenate.easeui.domain.User;
 
 public class UserDao {
 	private static final String TAG = UserDao.class.getSimpleName();

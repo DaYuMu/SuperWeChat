@@ -2,16 +2,13 @@ package cn.ucai.superwechat.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.animation.AlphaAnimation;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.hyphenate.chat.EMClient;
 
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.db.UserDao;
-import cn.ucai.superwechat.domain.User;
+import cn.hyphenate.easeui.domain.User;
 import cn.ucai.superwechat.utils.L;
 
 /**

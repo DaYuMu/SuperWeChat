@@ -12,7 +12,7 @@ import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.domain.InviteMessage;
 import cn.ucai.superwechat.domain.RobotUser;
 import cn.hyphenate.easeui.domain.EaseUser;
-import cn.ucai.superwechat.domain.User;
+import cn.hyphenate.easeui.domain.User;
 import cn.ucai.superwechat.utils.L;
 
 import com.hyphenate.util.HanziToPinyin;
