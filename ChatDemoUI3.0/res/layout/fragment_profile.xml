@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:layout_marginTop="10dp"
-            android:layout_below="@id/tv_profile_uaernick"
+            android:layout_below="@id/tv_profile_usernick"
             android:layout_toRightOf="@id/iv_profile_default_avatar"
             android:text="username"/>
 
