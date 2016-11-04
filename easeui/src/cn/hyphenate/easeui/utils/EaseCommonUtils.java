@@ -22,6 +22,7 @@ import com.hyphenate.chat.EMTextMessageBody;
 import cn.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.R;
 import cn.hyphenate.easeui.domain.EaseUser;
+
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.HanziToPinyin;
 import com.hyphenate.util.HanziToPinyin.Token;
@@ -148,7 +149,7 @@ public class EaseCommonUtils {
 	/**
      * set initial letter of according user's nickname( username if no nickname)
      * 
-     * @param username
+     * @param user
      * @param user
      */
     public static void setUserInitialLetter(EaseUser user) {
@@ -191,9 +192,7 @@ public class EaseCommonUtils {
     }
 
     /**
-     * set initial letter of according user's nickname( username if no nickname)
-     *  需要改正、、、、、、、、、、、、、、、、、、、、因为报错，所以稍后。。
-     * @param username
+     * @param user
      * @param user
      */
     public static void setAppUserInitialLetter(User user) {
@@ -224,13 +223,13 @@ public class EaseCommonUtils {
             }
         }
 
-        if ( !TextUtils.isEmpty(user.getNick()) ) {
-            letter = new GetInitialLetter().getLetter(user.getNick());
+        if ( !TextUtils.isEmpty(user.getMUserNick()) ) {
+            letter = new GetInitialLetter().getLetter(user.getMUserNick());
             user.setInitialLetter(letter);
             return;
         }
-        if (letter.equals(DefaultLetter) && !TextUtils.isEmpty(user.getUsername())) {
-            letter = new GetInitialLetter().getLetter(user.getUsername());
+        if (letter.equals(DefaultLetter) && !TextUtils.isEmpty(user.getMUserName())) {
+            letter = new GetInitialLetter().getLetter(user.getMUserName());
         }
         user.setInitialLetter(letter);
     }
