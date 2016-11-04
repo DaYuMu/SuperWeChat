@@ -1,4 +1,4 @@
-package cn.ucai.superwechat.domain;
+package cn.hyphenate.easeui.domain;
 
 import java.io.Serializable;
 

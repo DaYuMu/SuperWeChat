@@ -1,6 +1,8 @@
-package cn.ucai.superwechat.domain;
+package cn.hyphenate.easeui.domain;
 
 import java.io.Serializable;
+
+import cn.hyphenate.easeui.utils.EaseCommonUtils;
 
 
 public class User implements Serializable {
@@ -94,16 +96,16 @@ public class User implements Serializable {
 		return mavatarSuffix;
 	}
 
-//	public String getInitialLetter() {
-//		if(initialLetter == null){
-//			UserUtils.setUserInitialLetter(this);
-//		}
-//		return initialLetter;
-//	}
-//
-//	public void setInitialLetter(String initialLetter) {
-//		this.initialLetter = initialLetter;
-//	}
+	public String getInitialLetter() {
+		if(initialLetter == null){
+			EaseCommonUtils.setAppUserInitialLetter(this);
+		}
+		return initialLetter;
+	}
+
+	public void setInitialLetter(String initialLetter) {
+		this.initialLetter = initialLetter;
+	}
 
 	@Override
 	public String toString() {

@@ -22,6 +22,7 @@ import com.hyphenate.chat.EMTextMessageBody;
 import cn.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.R;
 import cn.hyphenate.easeui.domain.EaseUser;
+import cn.hyphenate.easeui.domain.User;
 
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.HanziToPinyin;
