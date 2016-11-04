@@ -40,7 +40,7 @@ import cn.ucai.superwechat.data.OkHttpUtils;
 import cn.ucai.superwechat.db.SuperWeChatDBManager;
 import cn.hyphenate.easeui.utils.EaseCommonUtils;
 import cn.ucai.superwechat.db.UserDao;
-import cn.ucai.superwechat.domain.User;
+import cn.hyphenate.easeui.domain.User;
 import cn.ucai.superwechat.utils.L;
 import cn.ucai.superwechat.utils.MD5;
 import cn.ucai.superwechat.utils.MFGT;
@@ -297,6 +297,8 @@ public class LoginActivity extends BaseActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		pd.dismiss();
+		if (pd != null) {
+			pd.dismiss();
+		}
 	}
 }
