@@ -103,4 +103,6 @@
     <string name="setting_txt_tongyong">通用</string>
     <string name="setting_txt_about">关于微信</string>
     <string name="setting_btn_exit">退出登录</string>
+    <string name="user_name_no_be_motify">name no motify</string>
+    <string name="nick_not_chang">nick not changed</string>
 </resources>

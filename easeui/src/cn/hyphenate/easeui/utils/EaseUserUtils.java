@@ -32,9 +32,15 @@ public class EaseUserUtils {
         
         return null;
     }
+    public static User getCurrentUserInfo(){
+        String username = EMClient.getInstance().getCurrentUser();
+        if(userProvider != null)
+            return userProvider.getAppUser(username);
+        return null;
+    }
     public static User getAppUserInfo(String username){
-//        if(userProvider != null)
-//            return userProvider.getAppUser(username);
+        if(userProvider != null)
+            return userProvider.getAppUser(username);
 
         return null;
     }
@@ -125,5 +131,10 @@ public class EaseUserUtils {
 
     private static void setAppUserName(String suffix, String username, TextView textview) {
         textview.setText(username);
+    }
+
+    public static void setAppUserWeixin(TextView tvweixin) {
+        String username = EMClient.getInstance().getCurrentUser();
+        tvweixin.setText(username);
     }
 }

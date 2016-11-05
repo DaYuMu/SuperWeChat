@@ -5,9 +5,18 @@ import java.io.ByteArrayOutputStream;
 import com.bumptech.glide.Glide;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
+
+import cn.hyphenate.easeui.domain.User;
+import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.hyphenate.easeui.domain.EaseUser;
 import cn.hyphenate.easeui.utils.EaseUserUtils;
+import cn.ucai.superwechat.bean.Result;
+import cn.ucai.superwechat.data.NetDao;
+import cn.ucai.superwechat.data.OkHttpUtils;
+import cn.ucai.superwechat.utils.CommonUtils;
+import cn.ucai.superwechat.utils.L;
+import cn.ucai.superwechat.utils.ResultUtils;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -30,92 +39,77 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class UserProfileActivity extends BaseActivity implements OnClickListener{
+	private static String TAG = UserProfileActivity.class.getSimpleName();
 	
 	private static final int REQUESTCODE_PICK = 1;
 	private static final int REQUESTCODE_CUTTING = 2;
 	private ImageView headAvatar;
-	private ImageView headPhotoUpdate;
-	private ImageView iconRightArrow;
 	private TextView tvNickName;
-	private TextView tvUsername;
+	private TextView tvweixin;
 	private ProgressDialog dialog;
-	private RelativeLayout rlNickName;
-	
-	
-	
+
+
+	UserProfileActivity mContext;
+	User user = null;
+
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
 		setContentView(cn.ucai.superwechat.R.layout.em_activity_user_profile);
+		mContext = this;
 		initView();
 		initListener();
+		user = EaseUserUtils.getCurrentUserInfo();
 	}
 	
 	private void initView() {
-		headAvatar = (ImageView) findViewById(cn.ucai.superwechat.R.id.user_head_avatar);
-		headPhotoUpdate = (ImageView) findViewById(cn.ucai.superwechat.R.id.user_head_headphoto_update);
-		tvUsername = (TextView) findViewById(cn.ucai.superwechat.R.id.user_username);
-		tvNickName = (TextView) findViewById(cn.ucai.superwechat.R.id.user_nickname);
-		rlNickName = (RelativeLayout) findViewById(cn.ucai.superwechat.R.id.rl_nickname);
-		iconRightArrow = (ImageView) findViewById(cn.ucai.superwechat.R.id.ic_right_arrow);
+		headAvatar = (ImageView) findViewById(R.id.iv_user_profile_avatar);
+		tvNickName = (TextView) findViewById(R.id.tv_user_profile_nick);
+		tvweixin = (TextView) findViewById(R.id.tv_user_profile_weixin);
 	}
 	
 	private void initListener() {
 		Intent intent = getIntent();
 		String username = intent.getStringExtra("username");
-		boolean enableUpdate = intent.getBooleanExtra("setting", false);
-		if (enableUpdate) {
-			headPhotoUpdate.setVisibility(View.VISIBLE);
-			iconRightArrow.setVisibility(View.VISIBLE);
-			rlNickName.setOnClickListener(this);
-			headAvatar.setOnClickListener(this);
-		} else {
-			headPhotoUpdate.setVisibility(View.GONE);
-			iconRightArrow.setVisibility(View.INVISIBLE);
-		}
-		if(username != null){
-    		/*if (username.equals(EMClient.getInstance().getCurrentUser())) {
-    			tvUsername.setText(EMClient.getInstance().getCurrentUser());
-    			EaseUserUtils.setUserNick(username, tvNickName);
-                EaseUserUtils.setUserAvatar(this, username, headAvatar);
-    		} else {
-    			tvUsername.setText(username);
-    			EaseUserUtils.setUserNick(username, tvNickName);
-    			EaseUserUtils.setUserAvatar(this, username, headAvatar);
-    			asyncFetchUserInfo(username);
-    		}*/
-			tvUsername.setText(username);
-			EaseUserUtils.setAppUserNick(username, tvNickName);
-			EaseUserUtils.setAppUserAvatar(this, username, headAvatar);
-		}
-	}
+		EaseUserUtils.setAppUserNick(username, tvNickName);
+		EaseUserUtils.setAppUserAvatar(this, username, headAvatar);
+		EaseUserUtils.setAppUserWeixin(tvweixin);
+		findViewById(R.id.user_profile_nick).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				final EditText editText = new EditText(mContext);
+				editText.setText(user.getMUserNick());
+				new Builder(mContext).setTitle(R.string.setting_nickname).setIcon(android.R.drawable.ic_dialog_info).setView(editText)
+						.setPositiveButton(R.string.dl_ok, new DialogInterface.OnClickListener() {
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case cn.ucai.superwechat.R.id.user_head_avatar:
-			uploadHeadPhoto();
-			break;
-		case cn.ucai.superwechat.R.id.rl_nickname:
-			final EditText editText = new EditText(this);
-			new AlertDialog.Builder(this).setTitle(cn.ucai.superwechat.R.string.setting_nickname).setIcon(android.R.drawable.ic_dialog_info).setView(editText)
-					.setPositiveButton(cn.ucai.superwechat.R.string.dl_ok, new DialogInterface.OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							String nickString = editText.getText().toString();
-							if (TextUtils.isEmpty(nickString)) {
-								Toast.makeText(UserProfileActivity.this, getString(cn.ucai.superwechat.R.string.toast_nick_not_isnull), Toast.LENGTH_SHORT).show();
-								return;
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								String nickString = editText.getText().toString().trim();
+								if (TextUtils.isEmpty(nickString)) {
+									Toast.makeText(UserProfileActivity.this, getString(R.string.toast_nick_not_isnull), Toast.LENGTH_SHORT).show();
+									return;
+								}
+								if (nickString.equals(user.getMUserNick())) {
+									CommonUtils.showLongToast(getString(R.string.nick_not_chang));
+									return;
+								}
+								updateRemoteNick(nickString);
 							}
-							updateRemoteNick(nickString);
-						}
-					}).setNegativeButton(cn.ucai.superwechat.R.string.dl_cancel, null).show();
-			break;
-		default:
-			break;
-		}
-
+						}).setNegativeButton(R.string.dl_cancel, null).show();
+			}
+		});
+		findViewById(R.id.user_profile_avatar).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				uploadHeadPhoto();
+			}
+		});
+		findViewById(R.id.user_profile_weixh).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				CommonUtils.showLongToast(R.string.user_name_no_be_motify);
+			}
+		});
 	}
 	
 	public void asyncFetchUserInfo(String username){
@@ -192,6 +186,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 						}
 					});
 				} else {
+					updateAppNick(nickName);
 					runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
@@ -204,6 +199,43 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 				}
 			}
 		}).start();
+	}
+
+	private void updateAppNick(String Nickname) {
+		NetDao.updatanick(mContext, user.getMUserName(), Nickname, new OkHttpUtils.OnCompleteListener<String>() {
+			@Override
+			public void onSuccess(String s) {
+				if (s != null) {
+					Result result = ResultUtils.getResultFromJson(s, User.class);
+					if (result != null && result.isRetMsg()) {
+						User u = (User) result.getRetData();
+						updateLocatUser(u);
+					} else {
+						Toast.makeText(UserProfileActivity.this, getString(cn.ucai.superwechat.R.string.toast_updatenick_fail), Toast.LENGTH_SHORT)
+								.show();
+						dialog.dismiss();
+					}
+				} else {
+					Toast.makeText(UserProfileActivity.this, getString(cn.ucai.superwechat.R.string.toast_updatenick_fail), Toast.LENGTH_SHORT)
+							.show();
+					dialog.dismiss();
+				}
+			}
+
+			@Override
+			public void onError(String error) {
+				L.e(TAG,"error="+error);
+				Toast.makeText(UserProfileActivity.this, getString(cn.ucai.superwechat.R.string.toast_updatenick_fail), Toast.LENGTH_SHORT)
+						.show();
+				dialog.dismiss();
+			}
+		});
+	}
+
+	private void updateLocatUser(User u) {
+		user = u;
+//		SuperWeChatHelper.getInstance().saveAppContact(u);
+		EaseUserUtils.setCurrentAppUserNick(tvNickName);
 	}
 
 	@Override
@@ -288,5 +320,10 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
 		return baos.toByteArray();
+	}
+
+	@Override
+	public void onClick(View v) {
+
 	}
 }

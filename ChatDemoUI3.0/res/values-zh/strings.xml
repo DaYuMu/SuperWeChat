@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="name_no_motify">用户名不能改变</string>
+    <string name="nick_not_chang">昵称未修改</string>
+</resources>
