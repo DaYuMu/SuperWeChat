@@ -3,6 +3,8 @@ package cn.ucai.superwechat.data;
 import android.app.Activity;
 import android.content.Context;
 
+import java.io.File;
+
 import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.utils.MD5;
@@ -70,6 +72,24 @@ public class NetDao {
                 .addParam(I.User.USER_NAME,name)
                 .addParam(I.User.NICK,nick)
                 .targetClass(String.class)
+                .execute(listener);
+    }
+    /**
+     * i下载更新头像后的数据
+     * @param context
+     * @param name
+     * @param file
+     * @param listener
+     */
+    public static void updateavatar(Context context, String name, File file,
+                                  OkHttpUtils.OnCompleteListener<String> listener) {
+        OkHttpUtils<String> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_UPDATE_AVATAR)
+                .addParam(I.NAME_OR_HXID,name)
+                .addParam(I.AVATAR_TYPE,I.AVATAR_TYPE_USER_PATH)
+                .addFile2(file)
+                .targetClass(String.class)
+                .post()
                 .execute(listener);
     }
 

@@ -1,12 +1,18 @@
 package cn.ucai.superwechat.ui;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 import com.bumptech.glide.Glide;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 
 import cn.hyphenate.easeui.domain.User;
+import cn.hyphenate.easeui.utils.EaseImageUtils;
+import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.hyphenate.easeui.domain.EaseUser;
@@ -16,6 +22,7 @@ import cn.ucai.superwechat.data.NetDao;
 import cn.ucai.superwechat.data.OkHttpUtils;
 import cn.ucai.superwechat.utils.CommonUtils;
 import cn.ucai.superwechat.utils.L;
+import cn.ucai.superwechat.utils.MFGT;
 import cn.ucai.superwechat.utils.ResultUtils;
 
 import android.app.AlertDialog;
@@ -74,6 +81,12 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 		EaseUserUtils.setAppUserNick(username, tvNickName);
 		EaseUserUtils.setAppUserAvatar(this, username, headAvatar);
 		EaseUserUtils.setAppUserWeixin(tvweixin);
+		findViewById(R.id.user_profile_title_back).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				MFGT.finish(mContext);
+			}
+		});
 		findViewById(R.id.user_profile_nick).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -249,6 +262,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			break;
 		case REQUESTCODE_CUTTING:
 			if (data != null) {
+				updateAppUserAvatar(data);
 				setPicToView(data);
 			}
 			break;
@@ -256,6 +270,38 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			break;
 		}
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	private void updateAppUserAvatar(final Intent picavatar) {
+		dialog = ProgressDialog.show(this, getString(cn.ucai.superwechat.R.string.dl_update_photo), getString(cn.ucai.superwechat.R.string.dl_waiting));
+		dialog.show();
+		File file = saveBitmapFile(picavatar);
+		NetDao.updateavatar(this, user.getMUserName(), file, new OkHttpUtils.OnCompleteListener<String>() {
+			@Override
+			public void onSuccess(String s) {
+				if (s != null) {
+					Result result = ResultUtils.getResultFromJson(s, User.class);
+					if (result != null && result.isRetMsg()) {
+						setPicToView(picavatar);
+					} else {
+						dialog.dismiss();
+						CommonUtils.showMsgShortToast(result!=null?result.getRetCode():R.string.toast_updatephoto_fail);
+//						CommonUtils.showLongToast(R.string.toast_updatephoto_fail);
+					}
+				} else {
+					dialog.dismiss();
+					CommonUtils.showLongToast(R.string.toast_updatephoto_fail);
+				}
+			}
+
+			@Override
+			public void onError(String error) {
+				L.e(TAG,"error="+error);
+				dialog.dismiss();
+				CommonUtils.showLongToast(R.string.toast_updatephoto_fail);
+			}
+		});
+
 	}
 
 	public void startPhotoZoom(Uri uri) {
@@ -288,7 +334,6 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 	}
 	
 	private void uploadUserAvatar(final byte[] data) {
-		dialog = ProgressDialog.show(this, getString(cn.ucai.superwechat.R.string.dl_update_photo), getString(cn.ucai.superwechat.R.string.dl_waiting));
 		new Thread(new Runnable() {
 
 			@Override
@@ -312,7 +357,6 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			}
 		}).start();
 
-		dialog.show();
 	}
 	
 	
@@ -325,5 +369,24 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 	@Override
 	public void onClick(View v) {
 
+	}
+
+	public File saveBitmapFile(Intent picavatar) {
+		Bundle extras = picavatar.getExtras();
+		if (extras != null) {
+			Bitmap bitmap = extras.getParcelable("data");
+			String imagepath = EaseImageUtils.getImagePath(user.getMUserName()+ I.AVATAR_SUFFIX_JPG);
+			File file = new File(imagepath);
+			try {
+				BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+				bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+				bos.flush();
+				bos.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return file;
+		}
+		return null;
 	}
 }
