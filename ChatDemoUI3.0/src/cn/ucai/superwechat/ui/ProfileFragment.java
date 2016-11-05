@@ -14,6 +14,7 @@ import cn.easemob.redpacketui.utils.RedPacketUtil;
 import cn.hyphenate.easeui.utils.EaseUserUtils;
 import cn.ucai.superwechat.Constant;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.utils.MFGT;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,7 +65,7 @@ public class ProfileFragment extends Fragment {
         layout.findViewById(R.id.tv_profile_setting).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                MFGT.gotoSettingsActivity(getActivity());
             }
         });
     }
