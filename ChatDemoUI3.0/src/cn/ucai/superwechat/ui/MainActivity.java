@@ -195,7 +195,7 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 		L.e(TAG,"开始添加第一个Fragment");
 		madapter.addFragment(new ContactListFragment(),getString(R.string.contacts));
 		madapter.addFragment(new DiscoverFragment(),getString(R.string.discover));
-		madapter.addFragment(new SettingsFragment(),getString(R.string.me));
+		madapter.addFragment(new ProfileFragment(),getString(R.string.me));
 		L.e(TAG,"成功添加四个Fragment");
 		madapter.notifyDataSetChanged();//  更新
 		mlayoutdmtabhost.setChecked(0);
