@@ -25,13 +25,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import cn.easemob.redpacketui.RedPacketConstant;
@@ -47,11 +44,15 @@ import com.hyphenate.chat.EMMessage;
 import cn.ucai.superwechat.Constant;
 import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.adapter.MainTabAdpter;
 import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.runtimepermissions.PermissionsManager;
 import cn.ucai.superwechat.runtimepermissions.PermissionsResultAction;
 import cn.hyphenate.easeui.utils.EaseCommonUtils;
+import cn.ucai.superwechat.widget.DMTabHost;
+import cn.ucai.superwechat.widget.MFViewPager;
+
 import com.hyphenate.util.EMLog;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -59,23 +60,14 @@ import com.umeng.update.UmengUpdateAgent;
 import java.util.List;
 
 @SuppressLint("NewApi")
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedChangeListener,ViewPager.OnPageChangeListener{
 
 	protected static final String TAG = "MainActivity";
-//	// textview for unread message count
-//	private TextView unreadLabel;
-//	// textview for unread event message
-//	private TextView unreadAddressLable;
-//
-//	private Button[] mTabs;
-//	private ContactListFragment contactListFragment;
-//	private Fragment[] fragments;
-//	private int index;
-//	private int currentTabIndex;
-//	// user logged into another device
 	public boolean isConflict = false;
-	// user account was removed
 	private boolean isCurrentAccountRemoved = false;
+	MainTabAdpter madapter;
+	MFViewPager mlayoutviewpage;
+	DMTabHost mlayoutdmtabhost;
 
 
 	/**
@@ -191,6 +183,21 @@ public class MainActivity extends BaseActivity {
 //		mTabs[2] = (Button) findViewById(R.id.btn_setting);
 //		// select first tab
 //		mTabs[0].setSelected(true);
+		mlayoutdmtabhost = (DMTabHost) findViewById(R.id.layout_dmtabhost);
+		mlayoutviewpage = (MFViewPager) findViewById(R.id.layout_viewpage);
+		madapter = new MainTabAdpter(getSupportFragmentManager());
+		madapter.clear();
+		mlayoutviewpage.setAdapter(madapter);
+		mlayoutviewpage.setOffscreenPageLimit(4);
+		//  添加四个Fragment
+		madapter.addFragment(new ConversationListFragment(),getString(R.string.app_name));
+		madapter.addFragment(new ContactListFragment(),getString(R.string.contacts));
+		madapter.addFragment(new DiscoverFragment(),getString(R.string.discover));
+		madapter.addFragment(new SettingsFragment(),getString(R.string.me));
+		madapter.notifyDataSetChanged();//  更新
+		mlayoutdmtabhost.setChecked(0);
+		mlayoutdmtabhost.setOnCheckedChangeListener(this);
+		mlayoutviewpage.setOnPageChangeListener(this);
 	}
 
 	EMMessageListener messageListener = new EMMessageListener() {
@@ -289,6 +296,30 @@ public class MainActivity extends BaseActivity {
         };
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
     }
+
+
+	@Override
+	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+	}
+
+	@Override
+	public void onPageSelected(int position) {
+		mlayoutdmtabhost.setChecked(position);
+		mlayoutviewpage.setCurrentItem(position);
+	}
+
+	@Override
+	public void onPageScrollStateChanged(int state) {
+
+	}
+
+	@Override
+	public void onCheckedChange(int checkedPosition, boolean byUser) {
+		//                             当前下标       是否显示滑动效果
+//		mlayoutviewpage.setCurrentItem(checkedPosition,true);
+//		mlayoutdmtabhost.setChecked(checkedPosition);
+	}
 
 	public class MyContactListener implements EMContactListener {
         @Override
@@ -566,4 +597,6 @@ public class MainActivity extends BaseActivity {
 			@NonNull int[] grantResults) {
 		PermissionsManager.getInstance().notifyPermissionsChange(permissions, grantResults);
 	}
+
+
 }

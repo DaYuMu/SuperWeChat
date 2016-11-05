@@ -31,7 +31,8 @@
         android:id="@+id/layout_viewpage"
         android:layout_below="@id/layout_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="48dp">
 
     </cn.ucai.superwechat.widget.MFViewPager>
     <LinearLayout
@@ -45,6 +46,7 @@
             android:layout_height="1dp"
             android:background="#D6DCDC"/>
         <cn.ucai.superwechat.widget.DMTabHost
+            android:id="@+id/layout_dmtabhost"
             android:layout_width="match_parent"
             android:layout_height="47dp">
             <cn.ucai.superwechat.widget.DMTabButton
