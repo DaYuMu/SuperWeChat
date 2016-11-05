@@ -38,6 +38,7 @@ import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.SuperWeChatModel;
 import cn.hyphenate.easeui.widget.EaseSwitchButton;
+import cn.ucai.superwechat.utils.ExitAppUtils;
 import cn.ucai.superwechat.utils.MFGT;
 
 import com.hyphenate.util.EMLog;
@@ -386,6 +387,7 @@ public class SettingsActivity extends BaseActivity implements OnClickListener {
 					public void run() {
 						pd.dismiss();
 						// show login screen
+						ExitAppUtils.getInstance().exit();
 						finish();
 						startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
 						
