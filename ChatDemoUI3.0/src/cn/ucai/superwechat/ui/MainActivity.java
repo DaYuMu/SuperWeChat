@@ -50,6 +50,7 @@ import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.runtimepermissions.PermissionsManager;
 import cn.ucai.superwechat.runtimepermissions.PermissionsResultAction;
 import cn.hyphenate.easeui.utils.EaseCommonUtils;
+import cn.ucai.superwechat.utils.L;
 import cn.ucai.superwechat.widget.DMTabHost;
 import cn.ucai.superwechat.widget.MFViewPager;
 
@@ -191,13 +192,17 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 		mlayoutviewpage.setOffscreenPageLimit(4);
 		//  添加四个Fragment
 		madapter.addFragment(new ConversationListFragment(),getString(R.string.app_name));
+		L.e(TAG,"开始添加第一个Fragment");
 		madapter.addFragment(new ContactListFragment(),getString(R.string.contacts));
 		madapter.addFragment(new DiscoverFragment(),getString(R.string.discover));
 		madapter.addFragment(new SettingsFragment(),getString(R.string.me));
+		L.e(TAG,"成功添加四个Fragment");
 		madapter.notifyDataSetChanged();//  更新
 		mlayoutdmtabhost.setChecked(0);
-		mlayoutdmtabhost.setOnCheckedChangeListener(this);
 		mlayoutviewpage.setOnPageChangeListener(this);
+		L.e(TAG,"setOnPageChangeListener方法被调用");
+		mlayoutdmtabhost.setOnCheckedChangeListener(this);
+		L.e(TAG,"setOnCheckedChangedListener方法被调用");
 	}
 
 	EMMessageListener messageListener = new EMMessageListener() {
@@ -305,6 +310,7 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 
 	@Override
 	public void onPageSelected(int position) {
+		L.e(TAG,"position="+position);
 		mlayoutdmtabhost.setChecked(position);
 		mlayoutviewpage.setCurrentItem(position);
 	}
@@ -316,8 +322,9 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 
 	@Override
 	public void onCheckedChange(int checkedPosition, boolean byUser) {
+		L.e(TAG,"position="+checkedPosition);
 		//                             当前下标       是否显示滑动效果
-//		mlayoutviewpage.setCurrentItem(checkedPosition,true);
+		mlayoutviewpage.setCurrentItem(checkedPosition,false);
 //		mlayoutdmtabhost.setChecked(checkedPosition);
 	}
 
