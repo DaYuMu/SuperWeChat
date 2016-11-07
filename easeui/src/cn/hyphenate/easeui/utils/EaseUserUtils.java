@@ -137,4 +137,8 @@ public class EaseUserUtils {
         String username = EMClient.getInstance().getCurrentUser();
         tvweixin.setText(username);
     }
+
+    public static void setAppUserName(String mUserName, TextView musername) {
+        setAppUserName("微信号："+mUserName,musername);
+    }
 }
