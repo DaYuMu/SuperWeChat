@@ -20,7 +20,7 @@
             android:textColor="#FFFFFF"
             android:textSize="30dp"/>
         <ImageView
-            android:id="@+id/LoginBack"
+            android:id="@+id/MainAdd"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_width="50dp"
