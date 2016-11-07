@@ -108,4 +108,19 @@ public class NetDao {
                 .execute(listener);
     }
 
+
+    /**
+     * 查找好友
+     * @param context
+     * @param name
+     * @param listener
+     */
+    public static void searchFriend(Context context, String name,
+                             OkHttpUtils.OnCompleteListener<String> listener) {
+        OkHttpUtils<String> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_FIND_USER)
+                .addParam(I.User.USER_NAME,name)
+                .targetClass(String.class)
+                .execute(listener);
+    }
 }
