@@ -282,6 +282,8 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 				if (s != null) {
 					Result result = ResultUtils.getResultFromJson(s, User.class);
 					if (result != null && result.isRetMsg()) {
+						User user = (User) result.getRetData();
+//						SuperWeChatHelper.getInstance().saveAppContact(user);
 						setPicToView(picavatar);
 					} else {
 						dialog.dismiss();
@@ -328,6 +330,11 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			Bitmap photo = extras.getParcelable("data");
 			Drawable drawable = new BitmapDrawable(getResources(), photo);
 			headAvatar.setImageDrawable(drawable);
+
+			dialog.dismiss();
+			Toast.makeText(UserProfileActivity.this, getString(cn.ucai.superwechat.R.string.toast_updatephoto_success),
+					Toast.LENGTH_SHORT).show();
+
 			uploadUserAvatar(Bitmap2Bytes(photo));
 		}
 
@@ -344,9 +351,11 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 					public void run() {
 						dialog.dismiss();
 						if (avatarUrl != null) {
+							dialog.dismiss();
 							Toast.makeText(UserProfileActivity.this, getString(cn.ucai.superwechat.R.string.toast_updatephoto_success),
 									Toast.LENGTH_SHORT).show();
 						} else {
+							dialog.dismiss();
 							Toast.makeText(UserProfileActivity.this, getString(cn.ucai.superwechat.R.string.toast_updatephoto_fail),
 									Toast.LENGTH_SHORT).show();
 						}

@@ -1,6 +1,7 @@
 package cn.ucai.superwechat.ui;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.hyphenate.chat.EMClient;
 
 import butterknife.OnClick;
 import cn.easemob.redpacketui.utils.RedPacketUtil;
@@ -66,6 +69,13 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 MFGT.gotoSettingsActivity(getActivity());
+            }
+        });
+        layout.findViewById(R.id.layout_profile_user).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), UserProfileActivity.class).putExtra("setting", true)
+                        .putExtra("username", EMClient.getInstance().getCurrentUser()));
             }
         });
     }

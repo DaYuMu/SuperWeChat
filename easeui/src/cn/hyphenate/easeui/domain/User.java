@@ -112,10 +112,13 @@ public class User implements Serializable {
 		return "UserAvatar [muserName=" + muserName + ", muserNick=" + muserNick + ", mavatarId=" + mavatarId
 				+ ", mavatarPath=" + mavatarPath + ", mavatarSuffix=" + mavatarSuffix + ", mavatarType=" + mavatarType
 				+ ", mavatarLastUpdateTime=" + mavatarLastUpdateTime + "]";
+   								//添加更新时间，使头像的地址改变，从而显示更新之后的头像。
 	}
 
-	public byte[] getAvatar() {
-		return avatar;
+	public String getAvatar() {
+		String path = "http://101.251.196.90:8000/SuperWeChatServerV2.0/downloadAvatar?name_or_hxid="
+				+getMUserName()+"&avatarType=user_avatar&m_avatar_suffix="+getMAvatarSuffix()+"&updatetime"+getMAvatarLastUpdateTime();
+		return path;
 	}
 
 	public void setAvatar(String avatar) {
