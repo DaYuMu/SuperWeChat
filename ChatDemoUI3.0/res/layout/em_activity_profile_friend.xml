@@ -81,6 +81,31 @@
         android:background="#DCDCDC"
         android:layout_below="@id/SettingFriendProfile"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="2dp"
         />
+    <Button
+        android:layout_marginTop="30dp"
+        android:id="@+id/btn_Add_Friend_Profile"
+        android:layout_below="@id/SettingFriendProfile"
+        android:text="添加到通讯录"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:layout_marginTop="30dp"
+        android:id="@+id/btn_Send_Video"
+        android:layout_below="@id/SettingFriendProfile"
+        android:text="视频通话"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:layout_marginTop="10dp"
+        android:id="@+id/btn_Send_Chat"
+        android:layout_below="@id/btn_Send_Video"
+        android:text="发送消息"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>
