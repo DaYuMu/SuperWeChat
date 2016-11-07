@@ -24,14 +24,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hyphenate.chat.EMClient;
+
+import cn.hyphenate.easeui.domain.User;
+import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.hyphenate.easeui.widget.EaseAlertDialog;
+import cn.ucai.superwechat.bean.Result;
+import cn.ucai.superwechat.data.NetDao;
+import cn.ucai.superwechat.data.OkHttpUtils;
+import cn.ucai.superwechat.utils.CommonUtils;
+import cn.ucai.superwechat.utils.L;
+import cn.ucai.superwechat.utils.MFGT;
+import cn.ucai.superwechat.utils.ResultUtils;
 
 public class AddContactActivity extends BaseActivity{
+	private static String TAG = AddContactActivity.class.getSimpleName();
 	private EditText editText;
-	private RelativeLayout searchedUserLayout;
-	private TextView nameText;
-	private Button searchBtn;
 	private String toAddUsername;
 	private ProgressDialog progressDialog;
 
@@ -39,56 +47,84 @@ public class AddContactActivity extends BaseActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(cn.ucai.superwechat.R.layout.em_activity_add_contact);
-		TextView mTextView = (TextView) findViewById(cn.ucai.superwechat.R.id.add_list_friends);
-		
-		editText = (EditText) findViewById(cn.ucai.superwechat.R.id.edit_note);
-		String strAdd = getResources().getString(cn.ucai.superwechat.R.string.add_friend);
-		mTextView.setText(strAdd);
-		String strUserName = getResources().getString(cn.ucai.superwechat.R.string.user_name);
-		editText.setHint(strUserName);
-		searchedUserLayout = (RelativeLayout) findViewById(cn.ucai.superwechat.R.id.ll_user);
-		nameText = (TextView) findViewById(cn.ucai.superwechat.R.id.name);
-		searchBtn = (Button) findViewById(cn.ucai.superwechat.R.id.search);
+		editText = (EditText) findViewById(R.id.edit_note);
+		setListener();
 	}
-	
-	
-	/**
-	 * search contact
-	 * @param v
-	 */
-	public void searchContact(View v) {
+
+	private void setListener() {
+		findViewById(R.id.AddFriend_Back).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				MFGT.finish(AddContactActivity.this);
+			}
+		});
+
+		findViewById(R.id.AddFriend_btn).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				searchContact();
+			}
+		});
+	}
+
+
+	public void searchContact() {
 		final String name = editText.getText().toString();
-		String saveText = searchBtn.getText().toString();
-		
-		if (getString(cn.ucai.superwechat.R.string.button_search).equals(saveText)) {
+
 			toAddUsername = name;
 			if(TextUtils.isEmpty(name)) {
 				new EaseAlertDialog(this, cn.ucai.superwechat.R.string.Please_enter_a_username).show();
 				return;
 			}
-			
-			// TODO you can search the user from your app server here.
-			
-			//show the userame and add button if user exist
-			searchedUserLayout.setVisibility(View.VISIBLE);
-			nameText.setText(toAddUsername);
-			
-		} 
-	}	
-	
+			progressDialog = new ProgressDialog(this);
+			String stri = getResources().getString(R.string.addcontact_search);
+			progressDialog.setMessage(stri);
+			progressDialog.setCanceledOnTouchOutside(false);
+			progressDialog.show();
+		searchAppUser();
+	}
+
+	private void searchAppUser() {
+		NetDao.searchFriend(this, toAddUsername, new OkHttpUtils.OnCompleteListener<String>() {
+			@Override
+			public void onSuccess(String s) {
+				progressDialog.dismiss();
+				if (s != null) {
+					Result result = ResultUtils.getResultFromJson(s, User.class);
+					if (result != null && result.isRetMsg()) {
+						User user = (User) result.getRetData();
+						if (user != null) {
+							MFGT.gotoFriendProfile(AddContactActivity.this,user);
+						}
+					} else {
+						CommonUtils.showLongToast(R.string.search_user_fail);
+					}
+				} else {
+					CommonUtils.showLongToast(R.string.search_user_fail);
+				}
+			}
+
+			@Override
+			public void onError(String error) {
+				L.e(TAG,"error="+error);
+				progressDialog.dismiss();
+			}
+		});
+	}
+
 	/**
 	 *  add contact
 	 * @param view
 	 */
 	public void addContact(View view){
-		if(EMClient.getInstance().getCurrentUser().equals(nameText.getText().toString())){
+		if(EMClient.getInstance().getCurrentUser().equals(editText.getText().toString())){
 			new EaseAlertDialog(this, cn.ucai.superwechat.R.string.not_add_myself).show();
 			return;
 		}
 		
-		if(SuperWeChatHelper.getInstance().getContactList().containsKey(nameText.getText().toString())){
+		if(SuperWeChatHelper.getInstance().getContactList().containsKey(editText.getText().toString())){
 		    //let the user know the contact already in your contact list
-		    if(EMClient.getInstance().contactManager().getBlackListUsernames().contains(nameText.getText().toString())){
+		    if(EMClient.getInstance().contactManager().getBlackListUsernames().contains(editText.getText().toString())){
 		        new EaseAlertDialog(this, cn.ucai.superwechat.R.string.user_already_in_contactlist).show();
 		        return;
 		    }
@@ -96,12 +132,7 @@ public class AddContactActivity extends BaseActivity{
 			return;
 		}
 		
-		progressDialog = new ProgressDialog(this);
-		String stri = getResources().getString(cn.ucai.superwechat.R.string.Is_sending_a_request);
-		progressDialog.setMessage(stri);
-		progressDialog.setCanceledOnTouchOutside(false);
-		progressDialog.show();
-		
+
 		new Thread(new Runnable() {
 			public void run() {
 				
@@ -128,8 +159,5 @@ public class AddContactActivity extends BaseActivity{
 			}
 		}).start();
 	}
-	
-	public void back(View v) {
-		finish();
-	}
+
 }
