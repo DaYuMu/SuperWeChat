@@ -65,8 +65,8 @@ public class ContactListFragment extends EaseContactListFragment {
         applicationItem = (ContactItemView) headerView.findViewById(cn.ucai.superwechat.R.id.application_item);
         applicationItem.setOnClickListener(clickListener);
         headerView.findViewById(cn.ucai.superwechat.R.id.group_item).setOnClickListener(clickListener);
-        headerView.findViewById(cn.ucai.superwechat.R.id.chat_room_item).setOnClickListener(clickListener);
-        headerView.findViewById(cn.ucai.superwechat.R.id.robot_item).setOnClickListener(clickListener);
+//        headerView.findViewById(cn.ucai.superwechat.R.id.chat_room_item).setOnClickListener(clickListener);
+//        headerView.findViewById(cn.ucai.superwechat.R.id.robot_item).setOnClickListener(clickListener);
         listView.addHeaderView(headerView);
         //add loading view
         loadingView = LayoutInflater.from(getActivity()).inflate(cn.ucai.superwechat.R.layout.em_layout_loading_data, null);
@@ -185,14 +185,14 @@ public class ContactListFragment extends EaseContactListFragment {
                 // 进入群聊列表页面
                 startActivity(new Intent(getActivity(), GroupsActivity.class));
                 break;
-            case cn.ucai.superwechat.R.id.chat_room_item:
-                //进入聊天室列表页面
-                startActivity(new Intent(getActivity(), PublicChatRoomsActivity.class));
-                break;
-            case cn.ucai.superwechat.R.id.robot_item:
-                //进入Robot列表页面
-                startActivity(new Intent(getActivity(), RobotsActivity.class));
-                break;
+//            case cn.ucai.superwechat.R.id.chat_room_item:
+//                //进入聊天室列表页面
+//                startActivity(new Intent(getActivity(), PublicChatRoomsActivity.class));
+//                break;
+//            case cn.ucai.superwechat.R.id.robot_item:
+//                //进入Robot列表页面
+//                startActivity(new Intent(getActivity(), RobotsActivity.class));
+//                break;
 
             default:
                 break;
@@ -234,7 +234,7 @@ public class ContactListFragment extends EaseContactListFragment {
 	/**
 	 * delete contact
 	 * 
-	 * @param toDeleteUser
+	 * @param tobeDeleteUser
 	 */
 	public void deleteContact(final EaseUser tobeDeleteUser) {
 		String st1 = getResources().getString(cn.ucai.superwechat.R.string.deleting);
