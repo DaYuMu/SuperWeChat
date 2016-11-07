@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/FriendProfile_Title"
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:background="#000000">
+        <ImageView
+            android:id="@+id/FriendProfile_Back"
+            android:layout_width="24dp"
+            android:layout_height="40dp"
+            android:src="@drawable/icon_back"
+            android:layout_centerVertical="true"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="个人资料"
+            android:textColor="#FFFFFF"
+            android:textSize="30dp"
+            android:gravity="center_horizontal"
+            android:layout_alignBottom="@+id/FriendProfile_Back"
+            android:layout_alignParentStart="true" />
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/FriendProfile_Layout"
+        android:layout_below="@id/FriendProfile_Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_profile_avater"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/default_avatar"
+            android:layout_alignParentStart="true" />
+
+
+        <TextView
+            android:id="@+id/tv_friend_profile_username"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/iv_profile_avater"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="username"/>
+        <TextView
+            android:id="@+id/tv_friend_profile_usernick"
+            android:layout_below="@id/tv_friend_profile_username"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/iv_profile_avater"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="usernick"/>
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/FriendProfile_View"
+        android:background="#DCDCDC"
+        android:layout_below="@id/FriendProfile_Layout"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        />
+
+    <TextView
+        android:id="@+id/SettingFriendProfile"
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:gravity="center_vertical"
+        android:text="设置备注或标签"
+        android:textSize="20dp"
+        android:layout_below="@id/FriendProfile_Layout"/>
+
+    <View
+        android:id="@+id/FriendProfile_Viewtwo"
+        android:background="#DCDCDC"
+        android:layout_below="@id/SettingFriendProfile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+</RelativeLayout>
