@@ -16,10 +16,17 @@ package cn.ucai.superwechat.adapter;
 import java.util.List;
 
 import com.hyphenate.chat.EMClient;
+
+import cn.hyphenate.easeui.domain.User;
+import cn.hyphenate.easeui.utils.EaseUserUtils;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.bean.Result;
+import cn.ucai.superwechat.data.NetDao;
+import cn.ucai.superwechat.data.OkHttpUtils;
 import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.domain.InviteMessage;
 import cn.ucai.superwechat.domain.InviteMessage.InviteMesageStatus;
+import cn.ucai.superwechat.utils.ResultUtils;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -65,7 +72,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		
+
 		String str1 = context.getResources().getString(R.string.Has_agreed_to_your_friend_request);
 		String str2 = context.getResources().getString(R.string.agree);
 		
@@ -92,7 +99,29 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 			}
 			
 			holder.reason.setText(msg.getReason());
-			holder.name.setText(msg.getFrom());
+//			holder.name.setText(msg.getFrom());
+			NetDao.searchFriend(context, msg.getFrom(), new OkHttpUtils.OnCompleteListener<String>() {
+				@Override
+				public void onSuccess(String s) {
+					if (s != null) {
+						Result result = ResultUtils.getResultFromJson(s, User.class);
+						if (result != null && result.isRetMsg()) {
+							User user = (User) result.getRetData();
+							EaseUserUtils.setAppUserPathAvatar(context,user.getAvatar(),holder.avator);
+							EaseUserUtils.setAppUserNick(user.getMUserNick(),holder.name);
+						} else {
+
+						}
+					} else {
+
+					}
+				}
+
+				@Override
+				public void onError(String error) {
+
+				}
+			});
 			// holder.time.setText(DateUtils.getTimestampString(new
 			// Date(msg.getTime())));
 			if (msg.getStatus() == InviteMesageStatus.BEAGREED) {
@@ -166,8 +195,8 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 	/**
 	 * accept invitation
 	 * 
-	 * @param button
-	 * @param username
+	 * @param buttonAgree
+	 * @param msg
 	 */
 	private void acceptInvitation(final Button buttonAgree, final Button buttonRefuse, final InviteMessage msg) {
 		final ProgressDialog pd = new ProgressDialog(context);
@@ -224,8 +253,8 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 	/**
      * decline invitation
      * 
-     * @param button
-     * @param username
+     * @param buttonAgree
+     * @param msg
      */
     private void refuseInvitation(final Button buttonAgree, final Button buttonRefuse, final InviteMessage msg) {
         final ProgressDialog pd = new ProgressDialog(context);
