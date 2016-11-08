@@ -30,6 +30,8 @@ import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import cn.easemob.redpacketui.RedPacketConstant;
@@ -64,6 +66,8 @@ import com.umeng.update.UmengUpdateAgent;
 
 import java.util.List;
 
+import static cn.ucai.superwechat.R.id.MainAdd;
+
 @SuppressLint("NewApi")
 public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedChangeListener,ViewPager.OnPageChangeListener{
 
@@ -73,7 +77,11 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 	MainTabAdpter madapter;
 	MFViewPager mlayoutviewpage;
 	DMTabHost mlayoutdmtabhost;
+
 	TitlePopup mTitlePopup;
+
+	ImageView mainAdd;
+	RelativeLayout layouttitle;
 
 
 	/**
@@ -191,10 +199,13 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 //		mTabs[0].setSelected(true);
 		mlayoutdmtabhost = (DMTabHost) findViewById(R.id.layout_dmtabhost);
 		mlayoutviewpage = (MFViewPager) findViewById(R.id.layout_viewpage);
+		mainAdd = (ImageView) findViewById(MainAdd);
+		layouttitle = (RelativeLayout) findViewById(R.id.layout_title);
 		madapter = new MainTabAdpter(getSupportFragmentManager());
 		madapter.clear();
 		mlayoutviewpage.setAdapter(madapter);
 		mlayoutviewpage.setOffscreenPageLimit(4);
+
 		//  添加四个Fragment
 		madapter.addFragment(new ConversationListFragment(),getString(R.string.app_name));
 		L.e(TAG,"开始添加第一个Fragment");
@@ -208,12 +219,21 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 		L.e(TAG,"setOnPageChangeListener方法被调用");
 		mlayoutdmtabhost.setOnCheckedChangeListener(this);
 		L.e(TAG,"setOnCheckedChangedListener方法被调用");
-		mTitlePopup = new TitlePopup(this, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+
+		mTitlePopup = new TitlePopup(this, ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
 		mTitlePopup.addAction(new ActionItem(this,R.string.menu_groupchat,R.drawable.icon_menu_group));
 		mTitlePopup.addAction(new ActionItem(this,R.string.menu_addfriend,R.drawable.icon_menu_addfriend));
 		mTitlePopup.addAction(new ActionItem(this,R.string.menu_qrcode,R.drawable.icon_menu_sao));
 		mTitlePopup.addAction(new ActionItem(this,R.string.menu_money,R.drawable.icon_menu_money));
-		TitlePopup.OnItemOnClickListener onItemOnClickListener = new TitlePopup.OnItemOnClickListener() {
+
+		findViewById(MainAdd).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mTitlePopup.show(findViewById(R.id.layout_title));
+			}
+		});
+		mTitlePopup.setItemOnClickListener(new TitlePopup.OnItemOnClickListener() {
 			@Override
 			public void onItemClick(ActionItem item, int position) {
 				switch (position) {
@@ -221,7 +241,8 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 
 						break;
 					case 1:
-						MFGT.gotoAddFrieng(MainActivity.this);
+						L.e(TAG,"case1:gotoAddFriend.onClick"+position);
+						MFGT.gotoAddFriend(MainActivity.this);
 						break;
 					case 2:
 
@@ -230,12 +251,6 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 
 						break;
 				}
-			}
-		};
-		findViewById(R.id.MainAdd).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				mTitlePopup.show(findViewById(R.id.layout_title));
 			}
 		});
 	}
