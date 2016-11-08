@@ -17,9 +17,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
+import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.adapter.NewFriendsMsgAdapter;
 import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.domain.InviteMessage;
+import cn.ucai.superwechat.utils.MFGT;
 
 import java.util.List;
 
@@ -41,10 +43,18 @@ public class NewFriendsMsgActivity extends BaseActivity {
 		NewFriendsMsgAdapter adapter = new NewFriendsMsgAdapter(this, 1, msgs);
 		listView.setAdapter(adapter);
 		dao.saveUnreadMessageCount(0);
+
+		setListener();
 		
 	}
 
-	public void back(View view) {
-		finish();
+	private void setListener() {
+		findViewById(R.id.iv_NewFriend_Back).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				MFGT.finish(NewFriendsMsgActivity.this);
+			}
+		});
 	}
+
 }
