@@ -157,6 +157,7 @@ public class EaseUserUtils {
     }
 
     public static void setAppUserName(String mUserName, TextView musername) {
-        setAppUserName("微信号："+mUserName,musername);
+        musername.setText("微信号："+mUserName);
+//        setAppUserName("微信号："+mUserName,musername);
     }
 }

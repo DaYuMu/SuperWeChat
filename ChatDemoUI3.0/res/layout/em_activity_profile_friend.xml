@@ -25,18 +25,20 @@
 
 
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/FriendProfile_Layout"
-        android:layout_below="@id/FriendProfile_Title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/FriendProfile_Title"
+        android:layout_alignParentStart="true">
 
         <ImageView
             android:id="@+id/iv_profile_avater"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/default_avatar"
-            android:layout_alignParentStart="true" />
+            android:layout_centerVertical="true"/>
 
 
         <TextView
@@ -107,5 +109,6 @@
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
 
 </RelativeLayout>

@@ -44,7 +44,7 @@ public class AddFriendActivity extends BaseActivity {
         mback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                MFGT.finish(AddFriendActivity.this);
             }
         });
         mbutton.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +95,7 @@ public class AddFriendActivity extends BaseActivity {
         mMyname = (EditText) findViewById(R.id.edit_note);
         mbutton = (Button) findViewById(R.id.Send_Add_Friend_btn);
         msg = getString(R.string.addcontact_send_msg_prefix)+
-                EaseUserUtils.getCurrentUserInfo().getMUserNick();
+                EaseUserUtils.getCurrentUserInfo().getMUserName();
         mMyname.setText(msg);
     }
 }
