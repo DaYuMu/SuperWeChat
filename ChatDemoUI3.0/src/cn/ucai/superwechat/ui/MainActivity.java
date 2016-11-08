@@ -78,8 +78,11 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 	MFViewPager mlayoutviewpage;
 	DMTabHost mlayoutdmtabhost;
 
+	ContactListFragment contactListFragment;
+
 	TitlePopup mTitlePopup;
 
+	int currentTabIndex;
 	ImageView mainAdd;
 	RelativeLayout layouttitle;
 
@@ -102,6 +105,7 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 		// runtime permission for android 6.0, just require all permissions here for simple
 		requestPermissions();
 
+		contactListFragment = new ContactListFragment();
 		initView();
 
 		umeng();
@@ -209,7 +213,7 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 		//  添加四个Fragment
 		madapter.addFragment(new ConversationListFragment(),getString(R.string.app_name));
 		L.e(TAG,"开始添加第一个Fragment");
-		madapter.addFragment(new ContactListFragment(),getString(R.string.contacts));
+		madapter.addFragment(contactListFragment,getString(R.string.contacts));
 		madapter.addFragment(new DiscoverFragment(),getString(R.string.discover));
 		madapter.addFragment(new ProfileFragment(),getString(R.string.me));
 		L.e(TAG,"成功添加四个Fragment");
@@ -329,11 +333,12 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 //                    if (conversationListFragment != null) {
 //                        conversationListFragment.refresh();
 //                    }
-//                } else if (currentTabIndex == 1) {
-//                    if(contactListFragment != null) {
-//                        contactListFragment.refresh();
-//                    }
-//                }
+//                } else
+ 				if (currentTabIndex == 1) {
+                    if(contactListFragment != null) {
+                        contactListFragment.refresh();
+                    }
+                }
                 String action = intent.getAction();
                 if(action.equals(Constant.ACTION_GROUP_CHANAGED)){
                     if (EaseCommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
@@ -360,6 +365,7 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 
 	@Override
 	public void onPageSelected(int position) {
+		currentTabIndex = position;
 		L.e(TAG,"position="+position);
 		mlayoutdmtabhost.setChecked(position);
 		mlayoutviewpage.setCurrentItem(position);
@@ -372,6 +378,7 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 
 	@Override
 	public void onCheckedChange(int checkedPosition, boolean byUser) {
+		currentTabIndex = checkedPosition;
 		L.e(TAG,"position="+checkedPosition);
 		//                             当前下标       是否显示滑动效果
 		mlayoutviewpage.setCurrentItem(checkedPosition,false);
@@ -444,11 +451,11 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 		runOnUiThread(new Runnable() {
 			public void run() {
 				int count = getUnreadAddressCountTotal();
-//				if (count > 0) {
-//					unreadAddressLable.setVisibility(View.VISIBLE);
-//				} else {
-//					unreadAddressLable.setVisibility(View.INVISIBLE);
-//				}
+				if (count > 0) {
+					mlayoutdmtabhost.setHasNew(1,true);
+				} else {
+					mlayoutdmtabhost.setHasNew(1,false);
+				}
 			}
 		});
 
