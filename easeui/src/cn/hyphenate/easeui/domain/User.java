@@ -109,10 +109,20 @@ public class User implements Serializable {
 
 	@Override
 	public String toString() {
-		return "UserAvatar [muserName=" + muserName + ", muserNick=" + muserNick + ", mavatarId=" + mavatarId
-				+ ", mavatarPath=" + mavatarPath + ", mavatarSuffix=" + mavatarSuffix + ", mavatarType=" + mavatarType
-				+ ", mavatarLastUpdateTime=" + mavatarLastUpdateTime + "]";
-   								//添加更新时间，使头像的地址改变，从而显示更新之后的头像。
+//		return "UserAvatar [muserName=" + muserName + ", muserNick=" + muserNick + ", mavatarId=" + mavatarId
+//				+ ", mavatarPath=" + mavatarPath + ", mavatarSuffix=" + mavatarSuffix + ", mavatarType=" + mavatarType
+//				+ ", mavatarLastUpdateTime=" + mavatarLastUpdateTime + "]";
+		//添加更新时间，使头像的地址改变，从而显示更新之后的头像。
+		return "User{" +
+				"muserName='" + muserName + '\'' +
+				", muserNick='" + muserNick + '\'' +
+				", mavatarId=" + mavatarId +
+				", mavatarPath='" + mavatarPath + '\'' +
+				", mavatarSuffix='" + mavatarSuffix + '\'' +
+				", mavatarType=" + mavatarType +
+				", mavatarLastUpdateTime='" + mavatarLastUpdateTime + '\'' +
+				", initialLetter='" + initialLetter + '\'' +
+				'}';
 	}
 
 	public String getAvatar() {

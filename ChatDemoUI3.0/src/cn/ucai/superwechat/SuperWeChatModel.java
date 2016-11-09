@@ -287,9 +287,7 @@ public class SuperWeChatModel {
     }
 
     public void delAppContact(String username) {
-        UserDao userDao = new UserDao(context);
         dao.deleteAppContact(username);
-
     }
 
 
