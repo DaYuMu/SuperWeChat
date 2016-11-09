@@ -17,12 +17,19 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import com.hyphenate.chat.EMClient;
+
+import cn.hyphenate.easeui.domain.User;
 import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.SuperWeChatHelper.DataSyncListener;
+import cn.ucai.superwechat.bean.Result;
+import cn.ucai.superwechat.data.NetDao;
+import cn.ucai.superwechat.data.OkHttpUtils;
 import cn.ucai.superwechat.db.InviteMessgeDao;
+import cn.ucai.superwechat.db.SuperWeChatDBManager;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.utils.L;
 import cn.ucai.superwechat.utils.MFGT;
+import cn.ucai.superwechat.utils.ResultUtils;
 import cn.ucai.superwechat.widget.ContactItemView;
 import cn.hyphenate.easeui.domain.EaseUser;
 import cn.hyphenate.easeui.ui.EaseContactListFragment;
@@ -250,6 +257,22 @@ public class ContactListFragment extends EaseContactListFragment {
 		pd.setMessage(st1);
 		pd.setCanceledOnTouchOutside(false);
 		pd.show();
+        NetDao.delContact(getActivity(), EMClient.getInstance().getCurrentUser(), tobeDeleteUser.getUsername(), new OkHttpUtils.OnCompleteListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                if (s != null) {
+                    Result result = ResultUtils.getResultFromJson(s, User.class);
+                    if (result != null && result.isRetMsg()) {
+                        SuperWeChatHelper.getInstance().delAppContact(tobeDeleteUser.getUsername());
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
 		new Thread(new Runnable() {
 			public void run() {
 				try {
