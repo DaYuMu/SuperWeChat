@@ -229,10 +229,11 @@ public class ContactListFragment extends EaseContactListFragment {
                 e.printStackTrace();
             }
 			return true;
-		}else if(item.getItemId() == cn.ucai.superwechat.R.id.add_to_blacklist){
+		}/*    拉入黑名单相关，，要删除的部分
+		else if(item.getItemId() == cn.ucai.superwechat.R.id.add_to_blacklist){
 			moveToBlacklist(toBeProcessUsername);
 			return true;
-		}
+		}*/
 		return super.onContextItemSelected(item);
 	}
 
