@@ -26,6 +26,9 @@ import com.hyphenate.chat.EMMessage.Type;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMTextMessageBody;
 
+import cn.ucai.superwechat.bean.Result;
+import cn.ucai.superwechat.data.NetDao;
+import cn.ucai.superwechat.data.OkHttpUtils;
 import cn.ucai.superwechat.db.SuperWeChatDBManager;
 import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.db.UserDao;
@@ -39,6 +42,7 @@ import cn.ucai.superwechat.ui.ChatActivity;
 import cn.ucai.superwechat.ui.MainActivity;
 import cn.ucai.superwechat.ui.VideoCallActivity;
 import cn.ucai.superwechat.ui.VoiceCallActivity;
+import cn.ucai.superwechat.utils.L;
 import cn.ucai.superwechat.utils.PreferenceManager;
 import cn.hyphenate.easeui.controller.EaseUI;
 import cn.hyphenate.easeui.domain.EaseEmojicon;
@@ -47,6 +51,7 @@ import cn.hyphenate.easeui.domain.EaseUser;
 import cn.hyphenate.easeui.model.EaseAtMessageHelper;
 import cn.hyphenate.easeui.model.EaseNotifier;
 import cn.hyphenate.easeui.utils.EaseCommonUtils;
+import cn.ucai.superwechat.utils.ResultUtils;
 
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
@@ -82,7 +87,7 @@ public class SuperWeChatHelper {
 
 	private Map<String, EaseUser> contactList;
 
-    private Map<String, User> acontactList;
+    private Map<String, User> appContactList;
 
 	private Map<String, RobotUser> robotList;
 
@@ -612,6 +617,27 @@ public class SuperWeChatHelper {
             }
             toAddUsers.put(username, user);
             localUsers.putAll(toAddUsers);
+            Map<String, User> localListUsers = getAppContactList();
+            if (!localListUsers.containsKey(username)) {
+                NetDao.addContact(appContext,EMClient.getInstance().getCurrentUser(), EMClient.getInstance().getCurrentUser(), new OkHttpUtils.OnCompleteListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        if (s != null) {
+                            Result result = ResultUtils.getResultFromJson(s, User.class);
+                            if (result != null && result.isRetMsg()) {
+                                User user = (User) result.getRetData();
+                                saveAppContact(user);
+                                broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
+            }
 
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
         }
@@ -671,7 +697,6 @@ public class SuperWeChatHelper {
             Log.d(username, username + " refused to your request");
         }
     }
-    
     /**
      * save and notify invitation message
      * @param msg
@@ -1269,10 +1294,10 @@ public class SuperWeChatHelper {
      */
     public void updateAppContactList(List<User> acontactInfoList) {
         for (User u : acontactInfoList) {
-            acontactList.put(u.getMUserName(),u);
+            appContactList.put(u.getMUserName(),u);
         }
         ArrayList<User> mList = new ArrayList<User>();
-        mList.addAll(acontactList.values());
+        mList.addAll(appContactList.values());
         demoModel.saveAppContactList(mList);
     }
     /**
@@ -1280,20 +1305,19 @@ public class SuperWeChatHelper {
      */
     public void setAppContactList(Map<String, User> aContactList) {
         if(aContactList == null){
-            if (contactList != null) {
-                contactList.clear();
+            if (appContactList != null) {
+                appContactList.clear();
             }
             return;
         }
-
-        acontactList = aContactList;
+        appContactList = aContactList;
     }
 
     /**
      * save single contact
      */
     public void saveAppContact(User user){
-        acontactList.put(user.getMUserName(), user);
+        appContactList.put(user.getMUserName(), user);
         demoModel.saveAppContact(user);
     }
 
@@ -1303,15 +1327,16 @@ public class SuperWeChatHelper {
      * @return
      */
     public Map<String, User> getAppContactList() {
-        if (isLoggedIn() && acontactList == null) {
-            acontactList = demoModel.getAppContactList();
+        if (isLoggedIn() && appContactList == null) {
+            appContactList = demoModel.getAppContactList();
+            L.e(TAG,"getAppContactList,appContactList="+appContactList);
         }
 
         // return a empty non-null object to avoid app crash
-        if(acontactList == null){
+        if(appContactList == null){
             return new Hashtable<String, User>();
         }
 
-        return acontactList;
+        return appContactList;
     }
 }
