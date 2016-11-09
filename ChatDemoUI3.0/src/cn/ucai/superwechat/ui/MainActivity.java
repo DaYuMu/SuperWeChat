@@ -71,6 +71,16 @@ import static cn.ucai.superwechat.R.id.MainAdd;
 @SuppressLint("NewApi")
 public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedChangeListener,ViewPager.OnPageChangeListener{
 
+
+	private android.app.AlertDialog.Builder conflictBuilder;
+	private android.app.AlertDialog.Builder accountRemovedBuilder;
+	private boolean isConflictDialogShow;
+	private boolean isAccountRemovedDialogShow;
+	private BroadcastReceiver internalDebugReceiver;
+	private ConversationListFragment conversationListFragment;
+	private BroadcastReceiver broadcastReceiver;
+	private LocalBroadcastManager broadcastManager;
+
 	protected static final String TAG = "MainActivity";
 	public boolean isConflict = false;
 	private boolean isCurrentAccountRemoved = false;
@@ -79,6 +89,7 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 	DMTabHost mlayoutdmtabhost;
 
 	ContactListFragment contactListFragment;
+//	ConversationListFragment conversationListFragment;
 
 	TitlePopup mTitlePopup;
 
@@ -106,6 +117,7 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 		requestPermissions();
 
 		contactListFragment = new ContactListFragment();
+		conversationListFragment = new ConversationListFragment();
 		initView();
 
 		umeng();
@@ -114,7 +126,6 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 
 		inviteMessgeDao = new InviteMessgeDao(this);
 		UserDao userDao = new UserDao(this);
-//		conversationListFragment = new ConversationListFragment();
 //		contactListFragment = new ContactListFragment();
 //		SettingsFragment settingFragment = new SettingsFragment();
 //		fragments = new Fragment[] { conversationListFragment, contactListFragment, settingFragment};
@@ -211,7 +222,7 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 		mlayoutviewpage.setOffscreenPageLimit(4);
 
 		//  添加四个Fragment
-		madapter.addFragment(new ConversationListFragment(),getString(R.string.app_name));
+		madapter.addFragment(conversationListFragment,getString(R.string.app_name));
 		L.e(TAG,"开始添加第一个Fragment");
 		madapter.addFragment(contactListFragment,getString(R.string.contacts));
 		madapter.addFragment(new DiscoverFragment(),getString(R.string.discover));
@@ -330,9 +341,9 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
                 updateUnreadAddressLable();
 //                if (currentTabIndex == 0) {
 //                    // refresh conversation list
-//                    if (conversationListFragment != null) {
-//                        conversationListFragment.refresh();
-//                    }
+                    if (conversationListFragment != null) {
+                        conversationListFragment.refresh();
+                    }
 //                } else
  				if (currentTabIndex == 1) {
                     if(contactListFragment != null) {
@@ -436,12 +447,9 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 	 */
 	public void updateUnreadLabel() {
 		int count = getUnreadMsgCountTotal();
-//		if (count > 0) {
-//			unreadLabel.setText(String.valueOf(count));
-//			unreadLabel.setVisibility(View.VISIBLE);
-//		} else {
-//			unreadLabel.setVisibility(View.INVISIBLE);
-//		}
+		if (count > 0) {
+		mlayoutdmtabhost.setUnreadCount(0,count);
+		}
 	}
 
 	/**
@@ -532,14 +540,6 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 		return super.onKeyDown(keyCode, event);
 	}
 
-	private android.app.AlertDialog.Builder conflictBuilder;
-	private android.app.AlertDialog.Builder accountRemovedBuilder;
-	private boolean isConflictDialogShow;
-	private boolean isAccountRemovedDialogShow;
-    private BroadcastReceiver internalDebugReceiver;
-    private ConversationListFragment conversationListFragment;
-    private BroadcastReceiver broadcastReceiver;
-    private LocalBroadcastManager broadcastManager;
 
 	/**
 	 * show the dialog when user logged into another device
