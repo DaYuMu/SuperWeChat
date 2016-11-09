@@ -42,6 +42,7 @@ public class FriendProfileActivity extends BaseActivity {
         if (user == null) {
             L.e(TAG,"不好··user==null了，自己关闭了。");
             MFGT.finish(this);
+            return;
         }
         initView();
         setListener();

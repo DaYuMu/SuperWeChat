@@ -618,14 +618,20 @@ public class SuperWeChatHelper {
             toAddUsers.put(username, user);
             localUsers.putAll(toAddUsers);
             Map<String, User> localListUsers = getAppContactList();
+            // http://101.251.196.90:8000/SuperWeChatServerV2.0/addContact?m_contact_user_name=tttt&m_contact_cname=zzzz
+            // http://101.251.196.90:8000/SuperWeChatServerV2.0/addContact?m_contact_user_name=yyyy&m_contact_cname=zzzz
             if (!localListUsers.containsKey(username)) {
-                NetDao.addContact(appContext,EMClient.getInstance().getCurrentUser(), EMClient.getInstance().getCurrentUser(), new OkHttpUtils.OnCompleteListener<String>() {
+                L.e(TAG,"if (!localListUsers.containsKey(username)) ...username="+username);
+                L.e(TAG,"EMClient.getInstance().getCurrentUser()="+EMClient.getInstance().getCurrentUser());
+                NetDao.addContact(appContext,EMClient.getInstance().getCurrentUser(),username, new OkHttpUtils.OnCompleteListener<String>() {
                     @Override
                     public void onSuccess(String s) {
                         if (s != null) {
+                            L.e(TAG,"s = "+s);
                             Result result = ResultUtils.getResultFromJson(s, User.class);
                             if (result != null && result.isRetMsg()) {
                                 User user = (User) result.getRetData();
+                                L.e(TAG,"user="+user);
                                 saveAppContact(user);
                                 broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
                             }
