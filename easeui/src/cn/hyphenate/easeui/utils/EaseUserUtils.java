@@ -2,6 +2,7 @@ package cn.hyphenate.easeui.utils;
 
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -122,10 +123,11 @@ public class EaseUserUtils {
      * set user's nickname
      */
     public static void setAppUserNick(String username,TextView textView){
+        Log.e("EaseUserUtils:user=",username+textView);
         if(textView != null){
-            EaseUser user = getUserInfo(username);
-            if(user != null && user.getNick() != null){
-                textView.setText(user.getNick());
+            User user = getAppUserInfo(username);
+            if(user != null && user.getMUserNick() != null){
+                textView.setText(user.getMUserNick());
             }else{
                 textView.setText(username);
             }
@@ -139,8 +141,7 @@ public class EaseUserUtils {
 
     public static void setCurrentAppUserNick( TextView userNick) {
         String username = EMClient.getInstance().getCurrentUser();
-        User user = new User(username);
-        setAppUserNick(user.getMUserNick(),userNick);
+        setAppUserNick(username,userNick);
     }
 
     public static void setCurrentAppUserName(TextView textview) {
