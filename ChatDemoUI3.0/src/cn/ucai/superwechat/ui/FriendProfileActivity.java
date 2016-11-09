@@ -38,7 +38,7 @@ public class FriendProfileActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(cn.ucai.superwechat.R.layout.em_activity_profile_friend);
         user = (User) getIntent().getSerializableExtra(I.User.USER_NAME);
-        L.e(TAG,"username"+user);
+        L.e(TAG,"username="+user);
         if (user == null) {
             L.e(TAG,"不好··user==null了，自己关闭了。");
             MFGT.finish(this);
@@ -99,7 +99,8 @@ public class FriendProfileActivity extends BaseActivity {
         mSendChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                MFGT.gotoChatActivity(FriendProfileActivity.this,user.getMUserName());
+//                startActivity(new Intent(getActivity(), ChatActivity.class).putExtra("userId", username));
             }
         });
         mSendVedio.setOnClickListener(new View.OnClickListener() {
