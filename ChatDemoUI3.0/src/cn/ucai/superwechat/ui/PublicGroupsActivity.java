@@ -40,6 +40,9 @@ import com.hyphenate.exceptions.HyphenateException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.utils.MFGT;
+
 public class PublicGroupsActivity extends BaseActivity {
 	private ProgressBar pb;
 	private ListView listView;
@@ -103,7 +106,13 @@ public class PublicGroupsActivity extends BaseActivity {
                 
             }
         });
-        
+
+        findViewById(R.id.public_group_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MFGT.finish(PublicGroupsActivity.this);
+            }
+        });
 	}
 
 	public void search(View view){
@@ -183,8 +192,5 @@ public class PublicGroupsActivity extends BaseActivity {
 			return convertView;
 		}
 	}
-	
-	public void back(View view){
-		finish();
-	}
+
 }
