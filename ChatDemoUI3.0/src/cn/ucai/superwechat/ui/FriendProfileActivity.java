@@ -81,9 +81,9 @@ public class FriendProfileActivity extends BaseActivity {
         L.e(TAG,"FriendProfileActivity.setUserInfo3333.start");
         EaseUserUtils.setAppUserPathAvatar(this,user.getAvatar(),mavatar);
         L.e(TAG,"头像加载完毕");
-        EaseUserUtils.setAppUserNick(user.getMUserName(),musernick);
+        EaseUserUtils.setAppUserName(user.getMUserName(),musernick);
         L.e(TAG,"userNick加载完毕");
-        EaseUserUtils.setAppUserName(user.getMUserName(),musername);
+        EaseUserUtils.setAppUserNick(user.getMUserName(),musername);
         L.e(TAG,"username加载完毕");
     }
 
