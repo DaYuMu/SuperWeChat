@@ -26,10 +26,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMGroupManager.EMGroupOptions;
 import com.hyphenate.chat.EMGroupManager.EMGroupStyle;
 
 import cn.hyphenate.easeui.widget.EaseAlertDialog;
+import cn.ucai.superwechat.data.NetDao;
+
 import com.hyphenate.exceptions.HyphenateException;
 
 public class NewGroupActivity extends BaseActivity {
@@ -44,12 +47,9 @@ public class NewGroupActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(cn.ucai.superwechat.R.layout.em_activity_new_group);
-		groupNameEditText = (EditText) findViewById(cn.ucai.superwechat.R.id.edit_group_name);
-		introductionEditText = (EditText) findViewById(cn.ucai.superwechat.R.id.edit_group_introduction);
-		publibCheckBox = (CheckBox) findViewById(cn.ucai.superwechat.R.id.cb_public);
-		memberCheckbox = (CheckBox) findViewById(cn.ucai.superwechat.R.id.cb_member_inviter);
-		secondTextView = (TextView) findViewById(cn.ucai.superwechat.R.id.second_desc);
-		
+
+		initView();
+
 		publibCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 		    @Override
@@ -63,10 +63,15 @@ public class NewGroupActivity extends BaseActivity {
 		});
 	}
 
-	/**
-	 * @param v
-	 */
-	public void save(View v) {
+	private void initView() {
+		groupNameEditText = (EditText) findViewById(cn.ucai.superwechat.R.id.edit_group_name);
+		introductionEditText = (EditText) findViewById(cn.ucai.superwechat.R.id.edit_group_introduction);
+		publibCheckBox = (CheckBox) findViewById(cn.ucai.superwechat.R.id.cb_public);
+		memberCheckbox = (CheckBox) findViewById(cn.ucai.superwechat.R.id.cb_member_inviter);
+		secondTextView = (TextView) findViewById(cn.ucai.superwechat.R.id.second_desc);
+	}
+
+	public void save() {
 		String name = groupNameEditText.getText().toString();
 		if (TextUtils.isEmpty(name)) {
 		    new EaseAlertDialog(this, cn.ucai.superwechat.R.string.Group_name_cannot_be_empty).show();
@@ -106,7 +111,11 @@ public class NewGroupActivity extends BaseActivity {
 						}else{
 						    option.style = memberCheckbox.isChecked()?EMGroupStyle.EMGroupStylePrivateMemberCanInvite:EMGroupStyle.EMGroupStylePrivateOnlyOwnerInvite;
 						}
-                        EMClient.getInstance().groupManager().createGroup(groupName, desc, members, reason, option);
+
+
+						EMGroup emGroup = EMClient.getInstance().groupManager().createGroup(groupName, desc, members, reason, option);
+						emGroup.getGroupId();
+
 						runOnUiThread(new Runnable() {
 							public void run() {
 								progressDialog.dismiss();
@@ -128,7 +137,4 @@ public class NewGroupActivity extends BaseActivity {
 		}
 	}
 
-	public void back(View view) {
-		finish();
-	}
 }
