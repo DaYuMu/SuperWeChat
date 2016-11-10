@@ -33,6 +33,7 @@ public class ConversationListFragment extends EaseConversationListFragment{
     @Override
     protected void initView() {
         super.initView();
+        hideTitleBar();
         View errorView = (LinearLayout) View.inflate(getActivity(), cn.ucai.superwechat.R.layout.em_chat_neterror_item, null);
         errorItemContainer.addView(errorView);
         errorText = (TextView) errorView.findViewById(cn.ucai.superwechat.R.id.tv_connect_errormsg);
