@@ -1108,50 +1108,46 @@ public class SuperWeChatHelper {
             return;
         }
 
+        NetDao.loadContact(appContext, new OkHttpUtils.OnCompleteListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                if (s != null) {
+                    Result result = ResultUtils.getListResultFromJson(s, User.class);
+                    if (result != null && result.isRetMsg()) {
 
+                        ArrayList<User> list = (ArrayList<User>) result.getRetData();
+                        if (list != null && list.size() > 0) {
+                            Map<String, User> userlist = new HashMap<String, User>();
+                            for (User user : list) {
+                                EaseCommonUtils.setAppUserInitialLetter(user);
+                                userlist.put(user.getMUserName(), user);
+                                L.e(TAG,"superWeChatDBManager.loadContact.userlist="+userlist);
+                            }
+                            // save the contact list to cache  内存
+                            getAppContactList().clear();
+                            getAppContactList().putAll(userlist);
+                            // save the contact list to database  数据库
+                            UserDao dao = new UserDao(appContext);
+                            ArrayList<User> users = new ArrayList<User>(userlist.values());
+                            L.e(TAG,"SuperWeChat.loadContact.database.users="+users);
+                            dao.saveAppContactList(users);
+                            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
         isSyncingContactsWithServer = true;
 
         new Thread(){
 
             @Override
             public void run(){
-
-
-
-
-                NetDao.loadContact(appContext, new OkHttpUtils.OnCompleteListener<String>() {
-                    @Override
-                    public void onSuccess(String s) {
-                        if (s != null) {
-                            Result result = ResultUtils.getListResultFromJson(s, User.class);
-                            if (result != null && result.isRetMsg()) {
-
-                                ArrayList<User> list = (ArrayList<User>) result.getRetData();
-                                if (list != null && list.size() > 0) {
-                                    Map<String, User> userlist = new HashMap<String, User>();
-                                    for (User user : list) {
-                                        EaseCommonUtils.setAppUserInitialLetter(user);
-                                        userlist.put(username, user);
-                                    }
-                                    // save the contact list to cache  内存
-                                    getAppContactList().clear();
-                                    getAppContactList().putAll(userlist);
-                                    // save the contact list to database  数据库
-                                    UserDao dao = new UserDao(appContext);
-                                    ArrayList<User> users = new ArrayList<User>(userlist.values());
-                                    dao.saveAppContactList(users);
-                                    broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
-                                }
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(String error) {
-
-                    }
-                });
-
                 List<String> usernames = null;
                 try {
                     usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();

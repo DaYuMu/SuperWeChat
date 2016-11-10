@@ -377,7 +377,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 
 	@Override
 	public void onClick(View v) {
-
+		uploadHeadPhoto();
 	}
 
 	public File saveBitmapFile(Intent picavatar) {
