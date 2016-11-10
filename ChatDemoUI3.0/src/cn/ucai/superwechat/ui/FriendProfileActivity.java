@@ -1,11 +1,15 @@
 package cn.ucai.superwechat.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.hyphenate.chat.EMClient;
 
 import java.io.Serializable;
 
@@ -107,7 +111,14 @@ public class FriendProfileActivity extends BaseActivity {
         mSendVedio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (!EMClient.getInstance().isConnected())
+                    Toast.makeText(FriendProfileActivity.this, cn.ucai.superwechat.R.string.not_connect_to_server, Toast.LENGTH_SHORT).show();
+                else {
+                    startActivity(new Intent(FriendProfileActivity.this, VideoCallActivity.class).putExtra("username", user.getMUserName())
+                            .putExtra("isComingCall", false));
+                    // videoCallBtn.setEnabled(false);
+//                    inputMenu.hideExtendMenuContainer();
+                }
             }
         });
     }
