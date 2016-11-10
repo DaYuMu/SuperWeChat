@@ -1145,7 +1145,7 @@ public class SuperWeChatHelper {
        });
 
        isSyncingContactsWithServer = true;
-       
+
        new Thread(){
            @Override
            public void run(){
@@ -1375,7 +1375,7 @@ public class SuperWeChatHelper {
      * @return
      */
     public Map<String, User> getAppContactList() {
-        if (isLoggedIn() && appContactList == null) {
+        if (isLoggedIn() && appContactList == null||appContactList.size()==0) {
             appContactList = demoModel.getAppContactList();
             L.e(TAG,"getAppContactList,appContactList="+appContactList);
         }

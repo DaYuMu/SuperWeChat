@@ -498,7 +498,7 @@ public class SuperWeChatDBManager {
             }
             cursor.close();
         }
-        return null;
+        return users;
     }
 
     synchronized public void deleteAppContact(String username) {
