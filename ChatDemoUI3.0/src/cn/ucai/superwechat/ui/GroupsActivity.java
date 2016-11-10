@@ -31,7 +31,9 @@ import android.widget.Toast;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import cn.ucai.superwechat.Constant;
+import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.adapter.GroupAdapter;
+import cn.ucai.superwechat.utils.MFGT;
 
 import com.hyphenate.exceptions.HyphenateException;
 
@@ -72,16 +74,18 @@ public class GroupsActivity extends BaseActivity {
 		setContentView(cn.ucai.superwechat.R.layout.em_fragment_groups);
 
 		instance = this;
+
 		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 		grouplist = EMClient.getInstance().groupManager().getAllGroups();
 		groupListView = (ListView) findViewById(cn.ucai.superwechat.R.id.list);
-		//show group list
-        groupAdapter = new GroupAdapter(this, 1, grouplist);
-        groupListView.setAdapter(groupAdapter);
-		
-		swipeRefreshLayout = (SwipeRefreshLayout) findViewById(cn.ucai.superwechat.R.id.swipe_layout);
-		swipeRefreshLayout.setColorSchemeResources(cn.ucai.superwechat.R.color.holo_blue_bright, cn.ucai.superwechat.R.color.holo_green_light,
-		                cn.ucai.superwechat.R.color.holo_orange_light, cn.ucai.superwechat.R.color.holo_red_light);
+		initView();
+
+		setListener();
+
+
+	}
+
+	private void setListener() {
 		//pull down to refresh
 		swipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
 
@@ -101,17 +105,19 @@ public class GroupsActivity extends BaseActivity {
 				}.start();
 			}
 		});
-		
+
 		groupListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if (position == 1) {
 					// create a new group
-					startActivityForResult(new Intent(GroupsActivity.this, NewGroupActivity.class), 0);
+//					startActivityForResult(new Intent(GroupsActivity.this, NewGroupActivity.class), 0);
+					MFGT.gotoNewGroupChat(GroupsActivity.this);
 				} else if (position == 2) {
 					// join a public group
-					startActivityForResult(new Intent(GroupsActivity.this, PublicGroupsActivity.class), 0);
+//					startActivityForResult(new Intent(GroupsActivity.this, PublicGroupsActivity.class), 0);
+					MFGT.gotoPubicGroupChat(GroupsActivity.this);
 				} else {
 					// enter group chat
 					Intent intent = new Intent(GroupsActivity.this, ChatActivity.class);
@@ -135,7 +141,23 @@ public class GroupsActivity extends BaseActivity {
 				return false;
 			}
 		});
-		
+
+		findViewById(R.id.groupChat_back).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				MFGT.finish(GroupsActivity.this);
+			}
+		});
+	}
+
+	private void initView() {
+		//show group list
+		groupAdapter = new GroupAdapter(this, 1, grouplist);
+		groupListView.setAdapter(groupAdapter);
+
+		swipeRefreshLayout = (SwipeRefreshLayout) findViewById(cn.ucai.superwechat.R.id.swipe_layout);
+		swipeRefreshLayout.setColorSchemeResources(cn.ucai.superwechat.R.color.holo_blue_bright, cn.ucai.superwechat.R.color.holo_green_light,
+				cn.ucai.superwechat.R.color.holo_orange_light, cn.ucai.superwechat.R.color.holo_red_light);
 	}
 
 	@Override
@@ -162,7 +184,5 @@ public class GroupsActivity extends BaseActivity {
 		instance = null;
 	}
 
-	public void back(View view) {
-		finish();
-	}
+
 }
