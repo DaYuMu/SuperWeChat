@@ -30,17 +30,22 @@ import com.hyphenate.chat.EMGroup;
 
 import java.util.List;
 
+import cn.hyphenate.easeui.utils.EaseUserUtils;
+import cn.ucai.superwechat.R;
+
 public class GroupAdapter extends ArrayAdapter<EMGroup> {
 
 	private LayoutInflater inflater;
 	private String newGroup;
 	private String addPublicGroup;
+	Context mContext;
 
 	public GroupAdapter(Context context, int res, List<EMGroup> groups) {
 		super(context, res, groups);
+		mContext = context;
 		this.inflater = LayoutInflater.from(context);
-		newGroup = context.getResources().getString(cn.ucai.superwechat.R.string.The_new_group_chat);
-		addPublicGroup = context.getResources().getString(cn.ucai.superwechat.R.string.add_public_group_chat);
+		newGroup = context.getResources().getString(R.string.The_new_group_chat);
+		addPublicGroup = context.getResources().getString(R.string.add_public_group_chat);
 	}
 
 	@Override
@@ -65,10 +70,10 @@ public class GroupAdapter extends ArrayAdapter<EMGroup> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (getItemViewType(position) == 0) {
 			if (convertView == null) {
-				convertView = inflater.inflate(cn.ucai.superwechat.R.layout.em_search_bar_with_padding, parent, false);
+				convertView = inflater.inflate(R.layout.em_search_bar_with_padding, parent, false);
 			}
-			final EditText query = (EditText) convertView.findViewById(cn.ucai.superwechat.R.id.query);
-			final ImageButton clearSearch = (ImageButton) convertView.findViewById(cn.ucai.superwechat.R.id.search_clear);
+			final EditText query = (EditText) convertView.findViewById(R.id.query);
+			final ImageButton clearSearch = (ImageButton) convertView.findViewById(R.id.search_clear);
 			query.addTextChangedListener(new TextWatcher() {
 				public void onTextChanged(CharSequence s, int start, int before, int count) {
 					getFilter().filter(s);
@@ -93,23 +98,24 @@ public class GroupAdapter extends ArrayAdapter<EMGroup> {
 			});
 		} else if (getItemViewType(position) == 1) {
 			if (convertView == null) {
-				convertView = inflater.inflate(cn.ucai.superwechat.R.layout.em_row_add_group, parent, false);
+				convertView = inflater.inflate(R.layout.em_row_add_group, parent, false);
 			}
-			((ImageView) convertView.findViewById(cn.ucai.superwechat.R.id.avatar)).setImageResource(cn.ucai.superwechat.R.drawable.em_create_group);
-			((TextView) convertView.findViewById(cn.ucai.superwechat.R.id.name)).setText(newGroup);
+			((ImageView) convertView.findViewById(R.id.group_avatar)).setImageResource(R.drawable.em_create_group);
+			((TextView) convertView.findViewById(R.id.name)).setText(newGroup);
 		} else if (getItemViewType(position) == 2) {
 			if (convertView == null) {
-				convertView = inflater.inflate(cn.ucai.superwechat.R.layout.em_row_add_group, parent, false);
+				convertView = inflater.inflate(R.layout.em_row_add_group, parent, false);
 			}
-			((ImageView) convertView.findViewById(cn.ucai.superwechat.R.id.avatar)).setImageResource(cn.ucai.superwechat.R.drawable.em_add_public_group);
-			((TextView) convertView.findViewById(cn.ucai.superwechat.R.id.name)).setText(addPublicGroup);
-			((TextView) convertView.findViewById(cn.ucai.superwechat.R.id.header)).setVisibility(View.VISIBLE);
+			((ImageView) convertView.findViewById(R.id.group_avatar)).setImageResource(R.drawable.em_add_public_group);
+			((TextView) convertView.findViewById(R.id.name)).setText(addPublicGroup);
+			((TextView) convertView.findViewById(R.id.header)).setVisibility(View.VISIBLE);
 
 		} else {
 			if (convertView == null) {
-				convertView = inflater.inflate(cn.ucai.superwechat.R.layout.em_row_group, parent, false);
+				convertView = inflater.inflate(R.layout.em_row_group, parent, false);
 			}
-			((TextView) convertView.findViewById(cn.ucai.superwechat.R.id.name)).setText(getItem(position - 3).getGroupName());
+			EaseUserUtils.setAppGroupAvatar(mContext,getItem(position - 3).getGroupId(), (ImageView) convertView.findViewById(R.id.public_avatar));
+			((TextView) convertView.findViewById(R.id.name)).setText(getItem(position - 3).getGroupName());
 
 		}
 
