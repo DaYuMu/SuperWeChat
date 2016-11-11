@@ -26,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -40,6 +41,7 @@ import com.hyphenate.exceptions.HyphenateException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.hyphenate.easeui.utils.EaseUserUtils;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.utils.MFGT;
 
@@ -186,7 +188,8 @@ public class PublicGroupsActivity extends BaseActivity {
 			if (convertView == null) {
 				convertView = inflater.inflate(cn.ucai.superwechat.R.layout.em_row_group, parent, false);
 			}
-
+            //  设置公开群的头像的显示。
+            EaseUserUtils.setAppGroupAvatar(getContext(),getItem(position).getGroupId(), (ImageView) convertView.findViewById(R.id.public_avatar));
 			((TextView) convertView.findViewById(cn.ucai.superwechat.R.id.name)).setText(getItem(position).getGroupName());
 
 			return convertView;
