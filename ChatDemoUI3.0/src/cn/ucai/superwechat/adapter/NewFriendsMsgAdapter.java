@@ -152,7 +152,8 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
                         holder.reason.setText(str8 + msg.getGroupName());
                     }
 				}
-				
+
+				EaseUserUtils.setAppGroupAvatar(getContext(),msg.getGroupName(),holder.avator);
 				// set click listener
                 holder.agree.setOnClickListener(new OnClickListener() {
                     @Override
