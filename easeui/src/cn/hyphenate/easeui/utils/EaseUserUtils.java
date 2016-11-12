@@ -117,10 +117,10 @@ public class EaseUserUtils {
             } catch (Exception e) {
                 //use default avatar
                 Glide.with(context).load(Group.getAvatar(hxid)).diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .placeholder(R.drawable.default_hd_avatar).into(imageView);
+                        .placeholder(R.drawable.ease_group_icon).into(imageView);
             }
         }else{
-            Glide.with(context).load(R.drawable.default_hd_avatar).into(imageView);
+            Glide.with(context).load(R.drawable.ease_group_icon).into(imageView);
         }
     }
 
