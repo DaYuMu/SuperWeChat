@@ -49,6 +49,8 @@ import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.data.NetDao;
 import cn.ucai.superwechat.data.OkHttpUtils;
+import cn.ucai.superwechat.utils.CommonUtils;
+import cn.ucai.superwechat.utils.L;
 import cn.ucai.superwechat.utils.ResultUtils;
 
 import com.hyphenate.exceptions.HyphenateException;
@@ -71,6 +73,8 @@ public class NewGroupActivity extends BaseActivity {
 	private static final int REQUESTCODE_PICK = 1;
 	private static final int REQUESTCODE_CUTTING = 2;
 	private static final int REQUESTCODE_PICK_MEMBER = 3;
+
+	EMGroup emGroup = null;
 
 	File avatarFile = null;
 
@@ -189,11 +193,15 @@ public class NewGroupActivity extends BaseActivity {
 						option.style = memberCheckbox.isChecked()?EMGroupStyle.EMGroupStylePrivateMemberCanInvite:EMGroupStyle.EMGroupStylePrivateOnlyOwnerInvite;
 					}
 
-
-					EMGroup emGroup = EMClient.getInstance().groupManager().createGroup(groupName, desc, members, reason, option);
+					L.e("NewGroupActivity.emGroup.groupName",groupName);
+					L.e("NewGroupActivity.emGroup.desc",desc);
+					L.e("NewGroupActivity.emGroup.members",members.toString());
+					L.e("NewGroupActivity.emGroup.reason",reason);
+					L.e("NewGroupActivity.emGroup.option",option.toString());
+					emGroup = EMClient.getInstance().groupManager().createGroup(groupName, desc, members, reason, option);
 					emGroup.getGroupId();
 
-					createAppGroup(emGroup);
+					createAppGroup();
 				} catch (final HyphenateException e) {
 					runOnUiThread(new Runnable() {
 						public void run() {
@@ -207,42 +215,65 @@ public class NewGroupActivity extends BaseActivity {
 		}).start();
 	}
 
-	private void createAppGroup(EMGroup emGroup) {
+	private void createAppGroup() {
+		OkHttpUtils.OnCompleteListener<String> listener = new OkHttpUtils.OnCompleteListener<String>() {
+			@Override
+			public void onSuccess(String s) {
+				if (s != null) {
+					Result result = ResultUtils.getResultFromJson(s, Group.class);
+					if (result != null && result.isRetMsg()) {
+						if (emGroup != null && emGroup.getMembers() != null && emGroup.getMembers().size() > 1) {
+							addGroupMember();
+						} else {
+							createGroupSuccess();
+						}
+					} else {
+						progressDialog.dismiss();
+						CommonUtils.showLongToast(R.string.Failed_to_create_groups);
+					}
+				} else {
+					progressDialog.dismiss();
+					CommonUtils.showLongToast(R.string.Failed_to_create_groups);
+				}
+			}
+
+			@Override
+			public void onError(String error) {
+				progressDialog.dismiss();
+				CommonUtils.showLongToast(R.string.Failed_to_create_groups);
+			}
+		};
 		if (avatarFile == null) {
-			NetDao.createGroup(this, emGroup, new OkHttpUtils.OnCompleteListener<String>() {
-				@Override
-				public void onSuccess(String s) {
-						afterCreateAppGroup(s);
-				}
-
-				@Override
-				public void onError(String error) {
-
-				}
-			});
+			NetDao.createGroup(this, emGroup,listener);
 		} else {
-			NetDao.createGroup(this, emGroup, avatarFile, new OkHttpUtils.OnCompleteListener<String>() {
-				@Override
-				public void onSuccess(String s) {
-					afterCreateAppGroup(s);
-				}
-
-				@Override
-				public void onError(String error) {
-
-				}
-			});
+			NetDao.createGroup(this, emGroup, avatarFile,listener);
 		}
 	}
 
-	private void afterCreateAppGroup(String s) {
-		if (s != null) {
-			Result result = ResultUtils.getResultFromJson(s, Group.class);
-			if (result != null && result.isRetMsg()) {
-				Group group = (Group) result.getRetData();
-				createGroupSuccess();
+	private void addGroupMember() {
+		NetDao.addGroupMember(this, emGroup, new OkHttpUtils.OnCompleteListener<String>() {
+			@Override
+			public void onSuccess(String s) {
+				if (s != null) {
+					Result result = ResultUtils.getResultFromJson(s, Group.class);
+					if (result != null && result.isRetMsg()) {
+						createGroupSuccess();
+					} else {
+						progressDialog.dismiss();
+						CommonUtils.showLongToast(R.string.Failed_to_create_groups);
+					}
+				} else {
+					progressDialog.dismiss();
+					CommonUtils.showLongToast(R.string.Failed_to_create_groups);
+				}
 			}
-		}
+
+			@Override
+			public void onError(String error) {
+				progressDialog.dismiss();
+				CommonUtils.showLongToast(R.string.Failed_to_create_groups);
+			}
+		});
 	}
 
 
