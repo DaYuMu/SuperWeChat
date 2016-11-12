@@ -48,7 +48,7 @@ public class GroupsActivity extends BaseActivity {
 	public static GroupsActivity instance;
 	private View progressBar;
 	private SwipeRefreshLayout swipeRefreshLayout;
-	
+
 	
 	Handler handler = new Handler(){
 	    public void handleMessage(android.os.Message msg) {

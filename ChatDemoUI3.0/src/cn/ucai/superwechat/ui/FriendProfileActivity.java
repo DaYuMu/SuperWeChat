@@ -18,8 +18,12 @@ import cn.hyphenate.easeui.utils.EaseUserUtils;
 import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatHelper;
+import cn.ucai.superwechat.bean.Result;
+import cn.ucai.superwechat.data.NetDao;
+import cn.ucai.superwechat.data.OkHttpUtils;
 import cn.ucai.superwechat.utils.L;
 import cn.ucai.superwechat.utils.MFGT;
+import cn.ucai.superwechat.utils.ResultUtils;
 
 /**
  * Created by Administrator on 2016/11/7 0007.
@@ -27,6 +31,7 @@ import cn.ucai.superwechat.utils.MFGT;
 
 public class FriendProfileActivity extends BaseActivity {
     private static String TAG = FriendProfileActivity.class.getSimpleName();
+    String username = null;
     User user = null;
     ImageView mavatar;
     ImageView mback;
@@ -35,22 +40,73 @@ public class FriendProfileActivity extends BaseActivity {
     Button mAddFriend;
     Button mSendChat;
     Button mSendVedio;
+    boolean isFriend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         L.e(TAG,"FriendProfileActivity.onCreate1111.start");
         super.onCreate(savedInstanceState);
         setContentView(cn.ucai.superwechat.R.layout.em_activity_profile_friend);
-        user = (User) getIntent().getSerializableExtra(I.User.USER_NAME);
-        L.e(TAG,"username="+user);
-        if (user == null) {
+        username = getIntent().getStringExtra(I.User.USER_NAME);
+        L.e(TAG,"username="+username);
+        if (username == null) {
             L.e(TAG,"不好··user==null了，自己关闭了。");
             MFGT.finish(this);
             return;
         }
         initView();
         setListener();
+        user = SuperWeChatHelper.getInstance().getAppContactList().get(username);
+        if (user == null) {
+            isFriend=false;
+        } else {
+            setUserInfo();
+            isFriend=true;
+        }
+        isFriend(isFriend);
+        syncUserInfo();
         L.e(TAG,"FriendProfileActivity.onCreate.end");
+    }
+
+    private void syncFail() {
+        if (!isFriend) {
+            MFGT.finish(this);
+            return;
+        }
+    }
+
+    private void syncUserInfo() {
+        NetDao.syncUserInfo(this, username, new OkHttpUtils.OnCompleteListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                if (s != null) {
+                    Result result = ResultUtils.getResultFromJson(s, User.class);
+                    if (result != null && result.isRetMsg()) {
+                        User u = (User) result.getRetData();
+                        if (user != null) {
+                            setUserInfo();
+                            if (isFriend) {
+                                // 同步数据，刷新好友的数据。
+                                SuperWeChatHelper.getInstance().saveAppContact(u);
+                            }
+                            user = u;
+                            setUserInfo();
+                        } else {
+                            syncFail();
+                        }
+                    } else {
+                        syncFail();
+                    }
+                } else {
+                    syncFail();
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                syncFail();
+            }
+        });
     }
 
     private void initView() {
@@ -64,12 +120,11 @@ public class FriendProfileActivity extends BaseActivity {
         mSendVedio = (Button) findViewById(R.id.btn_Send_Video);
         L.e(TAG,"FriendProfileActivity.initView.end");
         setUserInfo();
-        isFriend();
     }
 
-    private void isFriend() {
+    private void isFriend(boolean isFriend) {
         L.e(TAG,"FriendProfileActivity.isFriend4444.start");
-        if (SuperWeChatHelper.getInstance().getAppContactList().containsKey(user.getMUserName())) {
+        if (isFriend) {
             mSendVedio.setVisibility(View.VISIBLE);
             mSendChat.setVisibility(View.VISIBLE);
         } else {
