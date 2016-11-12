@@ -305,8 +305,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 	/**
 	 * 退出群组
-	 * 
-	 * @param groupId
 	 */
 	private void exitGrop() {
 		String st1 = getResources().getString(cn.ucai.superwechat.R.string.Exit_the_group_chat_failure);
@@ -338,7 +336,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	/**
 	 * 解散群组
 	 * 
-	 * @param groupId
 	 */
 	private void deleteGrop() {
 		final String st5 = getResources().getString(cn.ucai.superwechat.R.string.Dissolve_group_chat_tofail);
@@ -607,8 +604,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 //				Drawable avatar = getResources().getDrawable(R.drawable.default_avatar);
 //				avatar.setBounds(0, 0, referenceWidth, referenceHeight);
 //				button.setCompoundDrawables(null, avatar, null, null);
-				EaseUserUtils.setUserNick(username, holder.textView);
-				EaseUserUtils.setUserAvatar(getContext(), username, holder.imageView);
+				EaseUserUtils.setAppUserNick(username, holder.textView);
+				EaseUserUtils.setAppUserAvatar(getContext(), username, holder.imageView);
 				if (isInDeleteMode) {
 					// 如果是删除模式下，显示减人图标
 					convertView.findViewById(cn.ucai.superwechat.R.id.badge_delete).setVisibility(View.VISIBLE);
